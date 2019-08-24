@@ -1,12 +1,15 @@
 package edu.zucc.gats.trinity.bean;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-public class manager implements UserDetails {
+public class Manager {
     private String manCode;
     private String manName;
     private String manLevel;
@@ -46,6 +49,7 @@ public class manager implements UserDetails {
         this.manLevel = manLevel;
     }
 
+    @JsonIgnore
     public String getManPassword() {
         return manPassword;
     }
@@ -55,38 +59,6 @@ public class manager implements UserDetails {
     }
 
     //userdetail 部分
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
 
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }
