@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.LoginTicketMapper">
+    <insert id="addTicket"
+            parameterType="edu.zucc.gats.trinity.bean.LoginTicket">
+        insert into login_ticket(man_name,ticket,enabled)
+        value (#{manName},#{ticket},1)
+    </insert>
+
+    <update id="setTicketDisabledByTicket"
+            parameterType="String">
+        update login_ticket set enabled = 0
+        where ticket = #{ticket}
+    </update>
+
+    <delete id="deleteTicket"
+            parameterType="edu.zucc.gats.trinity.bean.LoginTicket">
+        delete from login_ticket
+        where id = #{id}
+    </delete>
+
+    <select id="loadTicketByManName"
+            parameterType="String"
+            resultType="edu.zucc.gats.trinity.bean.LoginTicket">
+        select * from login_ticket lt
+        where man_name = #{manName}
+        and lt.enabled != 0
+    </select>
+
+    <select id="loadTicketById"
+            parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.LoginTicket">
+        select * from login_ticket lt
+        where id = #{id}
+        and lt.enabled != 0
+    </select>
+
+    <select id="getTicketStatus"
+            parameterType="edu.zucc.gats.trinity.bean.LoginTicket"
+            resultType="int">
+        select enabled from login_ticket
+        where id = #{id}
+    </select>
+</mapper>

@@ -1,25 +1,46 @@
 package edu.zucc.gats.trinity.controller;
 
 
+import edu.zucc.gats.trinity.bean.Manager;
+import edu.zucc.gats.trinity.bean.RespBean;
 import edu.zucc.gats.trinity.mapper.ManagerMapper;
 import edu.zucc.gats.trinity.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static java.lang.System.out;
 
 @RestController
-@RequestMapping("/login")
 public class LoginController {
     @Autowired
     ManagerService managerService;
 
-    //获取账号密码
-    
-    //查找账号
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public RespBean managerLogin(
+            @RequestParam("manName")String manName,
+            @RequestParam("password")String password){
 
-    //匹配密码
+        out.println("i am in managerLogin");
+        //防止账号密码为空
+        if (manName.isEmpty() || password.isEmpty()){
+            return RespBean.error("账号或者密码为空");
+        }
+        out.println("avoid name or password is null");
+        //查找账号
+        Manager manager = managerService.loadManagerByName(manName);
+        if (manager==null){
+            return RespBean.error("没有此用户");
+        }
+        out.println("equals pwd");
+        if (!(manager.getPassword().equals(password))){
+            return RespBean.error("密码错误");
+        }
 
-    //设置token
+        //设置token
+
+        return RespBean.ok("登录成功!");
+    }
+
 
 }
