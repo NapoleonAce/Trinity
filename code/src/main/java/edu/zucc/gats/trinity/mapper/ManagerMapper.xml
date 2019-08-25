@@ -4,4 +4,47 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.zucc.gats.trinity.mapper.ManagerMapper">
 <!---->
+    <select id="loadManagerByCode"
+            parameterType="java.lang.String"
+            resultType="edu.zucc.gats.trinity.bean.Manager">
+        select * from managers where code = #{manCode}
+    </select>
+
+    <select id="getManagerRoleByCode"
+            parameterType="java.lang.String"
+            resultType="edu.zucc.gats.trinity.bean.Role">
+        select r.role_id,name,name_zh from role r,manager_role mr
+        where r.role_id = mr.role_id
+        and mr.manger_code = #{manCode}
+    </select>
+
+    <select id="loadManagerByName"
+            parameterType="String"
+            resultType="edu.zucc.gats.trinity.bean.Manager">
+        select * from managers where name = #{manName}
+    </select>
+
+    <select id="loadAllManagers"
+            resultType="List">
+        select * from managers
+    </select>
+
+    <insert id="addManager"
+            parameterType="edu.zucc.gats.trinity.bean.Manager">
+        insert into managers(name,password) value (#{name},#{password})
+    </insert>
+
+    <update id="updateManager"
+            parameterType="edu.zucc.gats.trinity.bean.Manager">
+        update managers set name = #{name},password=#{password}
+        where code = #{code}
+    </update>
+
+    <delete id="deleteManager"
+            parameterType="String">
+        delete from managers where code = #{manCode}
+    </delete>
+
+
+
 </mapper>

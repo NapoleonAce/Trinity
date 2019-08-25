@@ -6,8 +6,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SignIn {
-    @GetMapping("/test")
-    public String testAuth(){
-        return "test Authority";
+    @GetMapping("/admin/hello")
+    public String admin(){
+        return "hello admin";
+    }
+
+    @GetMapping("/student/hello")
+    public String student(){
+        return "hello Student";
+    }
+
+    @GetMapping("/college/hello")
+    public String college(){
+        return "hello College";
+    }
+
+    @GetMapping("/hello")
+    public String hello(){
+        return "hello ";
     }
 }
