@@ -6,25 +6,26 @@
 
       <el-header class="my-header" style="text-align: left">
 
-        <el-menu :default-active="activeIndex" class="header-nav" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="1">推荐</el-menu-item>
-          <el-menu-item index="2">
-            <template slot="title">搜索</template>
-          </el-menu-item>
+        <el-menu :default-active="activeIndex" class="header-nav" mode="horizontal" >
           <el-menu-item>
             <el-input
               class="my-header-search"
               placeholder="请输入搜索内容"
               prefix-icon="el-icon-search">
-              <el-select v-model="selectType" slot="prepend" placeholder="请选择" style="width: 100px">
+              <el-select v-model="selectType" slot="prepend" placeholder="请选择" style="width: 120px">
                 <el-option label="院校" value="1"></el-option>
                 <el-option label="专业" value="2"></el-option>
               </el-select>
               <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
           </el-menu-item>
+          <el-menu-item index="1">
+            <span class="menu-item-text">推荐</span>
+          </el-menu-item>
+          <el-menu-item index="2">
+            <span class="menu-item-text">搜索</span>
+          </el-menu-item>
         </el-menu>
-
       </el-header>
 
       <el-main class="my-main">
@@ -43,17 +44,22 @@
         data(){
           return{
             radio3:'北京',
-            selectType:''
+            selectType:'',
+            activeIndex:1
           }
-        }
+        },
     }
 </script>
 
 <style scoped>
+  .menu-item-text{
+    font-size: 20px;
+  }
   .header-nav{
+
   }
   .my-header-search{
-    margin-left: 50px;
+    margin-right: 50px;
     width: 500px;
   }
   .my-header-buttons{

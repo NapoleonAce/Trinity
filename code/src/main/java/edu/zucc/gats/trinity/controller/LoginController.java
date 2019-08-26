@@ -24,7 +24,8 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public RespBean managerLogin(
             @RequestParam("manName")String manName,
-            @RequestParam("password")String password){
+            @RequestParam("password")String password,
+            @RequestParam("role")String role){
 
         out.println("i am in managerLogin");
         //防止账号密码为空
