@@ -1,22 +1,37 @@
 <template>
-  <el-container>
-
-    <el-aside width="300px">
-      <left-nav></left-nav>
-    </el-aside>
-
     <el-container class="main-container" style="height: 100%;">
-      <div class="my-header" style="text-align: left">
-        <el-input
-          class="my-header-search"
-          placeholder="请输入搜索内容"
-          prefix-icon="el-icon-search"
-        >
-        </el-input>
-      </div>
-    </el-container>
+      <el-aside width="300px">
+        <left-nav></left-nav>
+      </el-aside>
 
-  </el-container>
+      <el-header class="my-header" style="text-align: left">
+
+        <el-menu :default-active="activeIndex" class="header-nav" mode="horizontal" @select="handleSelect">
+          <el-menu-item index="1">推荐</el-menu-item>
+          <el-menu-item index="2">
+            <template slot="title">搜索</template>
+          </el-menu-item>
+          <el-menu-item>
+            <el-input
+              class="my-header-search"
+              placeholder="请输入搜索内容"
+              prefix-icon="el-icon-search">
+              <el-select v-model="selectType" slot="prepend" placeholder="请选择" style="width: 100px">
+                <el-option label="院校" value="1"></el-option>
+                <el-option label="专业" value="2"></el-option>
+              </el-select>
+              <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
+          </el-menu-item>
+        </el-menu>
+
+      </el-header>
+
+      <el-main class="my-main">
+
+      </el-main>
+
+    </el-container>
 </template>
 
 <script>
@@ -24,11 +39,23 @@
     import LeftNav from "@/components/leftNav";
     export default {
         name: "homeView",
-        components: {LeftNav}
+        components: {LeftNav},
+        data(){
+          return{
+            radio3:'北京',
+            selectType:''
+          }
+        }
     }
 </script>
 
 <style scoped>
+  .header-nav{
+  }
+  .my-header-search{
+    margin-left: 50px;
+    width: 500px;
+  }
   .my-header-buttons{
     display: inline-block;
     margin-left: 10%;
@@ -39,22 +66,24 @@
     height: 60px;
   }
   .main-container{
+    padding-left: 0px;
     top:0;
-    margin-left: 300px;
     width: 100%;
     background-color: white;
   }
   .my-header{
-    border-left: 1px solid #ededed;
-    background-color: #fafafa;
-    position: fixed;
+    /*border: 1px solid #ededed;*/
+    background-color: white;
+    margin-left: 300px;
+    display: inline-block;
     top:0;
-    width: 50%;
+    width:80%;
     padding: 1%;
     z-index: 2;
   }
   .my-main{
-    margin-top: 8%;
+    margin-left: 300px;
+    margin-top: 2%;
   }
 
 </style>

@@ -35,7 +35,6 @@
       <el-menu
         style = 'width: 100%;font-size: 18px'
         :default-openeds = "['1']"
-        background-color="#fafafa"
         text-color="black"
         active-text-color="#ffd04b">
 
@@ -48,18 +47,24 @@
 
         <el-menu-item index = "2">
             <i class="el-icon-document"></i>
-            <span class="menu-item-text">查询</span>
+            <span class="menu-item-text">个人信息</span>
         </el-menu-item>
 
         <el-menu-item index = "3">
-          <i class="el-icon-date"></i>
-          <span class="menu-item-text">日历</span>
+          <i class="el-icon-setting"></i>
+          <span class="menu-item-text">院校管理</span>
         </el-menu-item>
 
+        <el-menu-item index = "4">
+          <template slot="title">
+            <i class="el-icon-setting"></i>
+            <span class="menu-item-text">学生管理</span>
+          </template>
+        </el-menu-item>
         <el-menu-item index = "5">
           <template slot="title">
             <i class="el-icon-setting"></i>
-            <span class="menu-item-text">设置</span>
+            <span class="menu-item-text">用户信息管理</span>
           </template>
         </el-menu-item>
 
@@ -99,7 +104,7 @@
   .left-nav{
     /*不能少于300px*/
     /*text-align: right;*/
-    border-right: 1px solid #ededed;
+    /*border-right: 1px solid #ededed;*/
     top: 0;
     padding-top: 2%;
     position: fixed;
@@ -107,7 +112,7 @@
     height: 100%;
     min-width: 300px;
     /*width: 20%;*/
-    background-color: #fafafa;
+
     /*color: black;*/
   }
   .left-user-date{
