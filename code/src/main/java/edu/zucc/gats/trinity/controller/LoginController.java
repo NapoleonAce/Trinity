@@ -52,7 +52,6 @@ public class LoginController {
                                         @RequestParam("password")String password,
                                         HttpServletResponse response){
 
-
         out.println("testing loadManagerByCode");
         Manager manager1  = managerService.loadManagerByCode(manCode);
         out.println(manager1.toString());

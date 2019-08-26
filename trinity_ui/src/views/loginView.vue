@@ -57,6 +57,7 @@
           v-model="formLabelAlign.region">
         </el-input>
       </div>
+      <router-link to="/homeView">
         <el-button
           style="
             margin: 30px;
@@ -68,6 +69,7 @@
           type="primary">
           登录
         </el-button>
+      </router-link>
 
 
     </el-card>
