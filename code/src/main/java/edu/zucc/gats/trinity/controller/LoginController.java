@@ -42,9 +42,7 @@ public class LoginController {
         if (!(manager.getPassword().equals(password))){
             return RespBean.error("密码错误");
         }
-
         //设置token
-
         return RespBean.ok("登录成功!");
     }
     @RequestMapping(value = "/manager",method = RequestMethod.POST)
@@ -70,6 +68,4 @@ public class LoginController {
 
         return RespBean.ok("ok");
     }
-
-
 }

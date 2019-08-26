@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.CollegeMapper">
+
+    <insert id="addCollege" parameterType="edu.zucc.gats.trinity.bean.College">
+        insert into college(college_name,province,city,content)
+        value (#{collegeName},#{province},#{city},#{content})
+    </insert>
+
+    <delete id="deleteCollege" parameterType="edu.zucc.gats.trinity.bean.College">
+        delete from college where college_id = #{collegeId}
+    </delete>
+
+    <update id="updateCollege"
+            parameterType="edu.zucc.gats.trinity.bean.College">
+        update college set
+        college_name = #{collegeName},
+        province = #{province},
+        city = #{city},
+        content = #{content}
+        where college_id = #{collegeId}
+    </update>
+
+    <select id="loadCollegeByName" parameterType="String"
+            resultType="edu.zucc.gats.trinity.bean.College">
+        select * from college where college_name = #{collegeName}
+    </select>
+
+    <select id="loadCollegeById" parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.College">
+        select * from college where college_id = #{collegeId}
+    </select>
+
+    <select id="searchCollegeByKey"
+            resultType="edu.zucc.gats.trinity.bean.College">
+        select * from college where college_name 
+        like CONCAT(CONCAT('%', #{key}), '%')
+    </select>
+
+    <select id="loadAllCollegeByPage"
+            resultType="edu.zucc.gats.trinity.bean.College">
+        select * from college limit #{begin},#{offset}
+    </select>
+
+</mapper>
