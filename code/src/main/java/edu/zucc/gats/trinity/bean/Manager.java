@@ -7,6 +7,14 @@ public class Manager  {
     private String name;
     private String password;
 
+    public Manager(){
+
+    }
+    public Manager(String code, String name, String password) {
+        this.code = code;
+        this.name = name;
+        this.password = password;
+    }
 
     public String getPassword() {
         return password;

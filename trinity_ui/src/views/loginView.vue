@@ -92,7 +92,6 @@
     methods:{
       changeChosenRole(role){
         this.chosenRole = role
-
       }
     }
   }

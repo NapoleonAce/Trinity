@@ -25,13 +25,13 @@
     </select>
 
     <select id="loadAllManagers"
-            resultType="List">
+            resultType="edu.zucc.gats.trinity.bean.Manager">
         select * from managers
     </select>
 
     <insert id="addManager"
             parameterType="edu.zucc.gats.trinity.bean.Manager">
-        insert into managers(name,password) value (#{name},#{password})
+        insert into managers(code,name,password) value (#{code},#{name},#{password})
     </insert>
 
     <update id="updateManager"

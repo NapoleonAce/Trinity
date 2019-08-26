@@ -21,7 +21,7 @@ public class LoginTicketService {
     }
 
     public int deleteTicket(LoginTicket loginTicket){
-        return loginTicketMapper.deleteTicket(loginTicket)
+        return loginTicketMapper.deleteTicket(loginTicket);
     }
     public LoginTicket loadTicketByManName(String manName){
         return loginTicketMapper.loadTicketByManName(manName);
