@@ -1,8 +1,12 @@
 package edu.zucc.gats.trinity.controller;
 
-import edu.zucc.gats.trinity.bean.College;
-import edu.zucc.gats.trinity.bean.RespBean;
+import edu.zucc.gats.trinity.bean.*;
+import edu.zucc.gats.trinity.mapper.ManagerRoleMapper;
+import edu.zucc.gats.trinity.mapper.StudentMapper;
 import edu.zucc.gats.trinity.service.CollegeService;
+import edu.zucc.gats.trinity.service.ManagerRoleService;
+import edu.zucc.gats.trinity.service.ManagerService;
+import edu.zucc.gats.trinity.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,26 +20,17 @@ import static java.lang.System.out;
 public class testController {
 
     @Autowired
-    CollegeService collegeService;
+    ManagerRoleService managerRoleService;
+
+    @Autowired
+    ManagerService managerService;
 
     @RequestMapping(value = "/test",method = RequestMethod.GET)
     public RespBean testModule(){
-        College college = new College("弥斯喀托米尔","密歇根","弥斯喀托米尔","克苏鲁发糖！");
 
-        college.setCollegeId(1);
-        out.print("test loadName ");
-        College college1 = collegeService.loadCollegeByName("克苏鲁");
-        out.println(college1.toString());
-
-
-      out.println("test loadPage");
-        List<College> colleges = collegeService.loadAllCollegeByPage(1,2);
-        for (College college2 : colleges){
-            out.println(college2.toString());
-        }
-
-        out.print("test delete ");
-        collegeService.deleteCollege(college1);
+        Manager manager = managerService.loadManagerByName("student");
+        ManagerRole managerRole = managerRoleService.loadManagerRoleByManager(manager);
+        out.println(managerRoleService.updateManagerRole(managerRole));
 
 
         return RespBean.ok("测试完成！");

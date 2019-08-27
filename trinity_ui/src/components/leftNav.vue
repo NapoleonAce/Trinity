@@ -64,7 +64,7 @@
         <el-menu-item index = "5">
           <template slot="title">
             <i class="el-icon-setting"></i>
-            <span class="menu-item-text">用户信息管理</span>
+            <span class="menu-item-text">用户管理</span>
           </template>
         </el-menu-item>
 

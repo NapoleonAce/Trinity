@@ -2,15 +2,25 @@ package edu.zucc.gats.trinity.bean;
 
 public class ManagerRole {
     private int id;
-    private String manaCode;
+    private String managerCode;
     private int roleId;
 
+    public ManagerRole(int id, String managerCode, int roleId) {
+        this.id = id;
+        this.managerCode = managerCode;
+        this.roleId = roleId;
+    }
+
+    public ManagerRole(String managerCode, int roleId) {
+        this.managerCode = managerCode;
+        this.roleId = roleId;
+    }
 
     @Override
     public String toString() {
         return "ManagerRole{" +
                 "id=" + id +
-                ", manaCode='" + manaCode + '\'' +
+                ", manaCode='" + managerCode + '\'' +
                 ", roleId=" + roleId +
                 '}';
     }
@@ -23,12 +33,12 @@ public class ManagerRole {
         this.id = id;
     }
 
-    public String getManaCode() {
-        return manaCode;
+    public String getManagerCode() {
+        return managerCode;
     }
 
-    public void setManaCode(String manaCode) {
-        this.manaCode = manaCode;
+    public void setManagerCode(String manaCode) {
+        this.managerCode = manaCode;
     }
 
     public int getRoleId() {
