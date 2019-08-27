@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.DomainMapper">
+    <insert id="addDomain" parameterType="edu.zucc.gats.trinity.bean.Domain">
+        insert into domain(domain_name,domain_type,college_id,content)
+        value (#{domainName},#{domainType},#{collegeId},#{content})
+    </insert>
+
+    <delete id="deleteDomain" parameterType="edu.zucc.gats.trinity.bean.Domain">
+        delete from domain where domain_id = #{domainId}
+    </delete>
+
+    <update id="updateDomain" parameterType="edu.zucc.gats.trinity.bean.Domain">
+        update domain set
+        domain_name = #{domainName},
+        domain_type = #{domainType},
+        college_id = #{collegeId},
+        content = #{content}
+        where domain_id = #{domainId}
+    </update>
+
+    <select id="loadDomainByName" parameterType="String"
+            resultType="edu.zucc.gats.trinity.bean.Domain">
+        select * from domain where domain_name = #{domainName}
+    </select>
+
+    <select id="loadDomainById" parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.Domain">
+        select * from domain where domain_id = #{domainId}
+    </select>
+
+    <select id="searchDomainByKey"
+            resultType="edu.zucc.gats.trinity.bean.Domain">
+        select * from domain where domain_name
+        like CONCAT(CONCAT('%', #{key}), '%')
+    </select>
+
+    <select id="loadAllDomainByPage"
+            resultType="edu.zucc.gats.trinity.bean.Domain">
+        select * from domain limit #{begin},#{offset}
+    </select>
+
+</mapper>

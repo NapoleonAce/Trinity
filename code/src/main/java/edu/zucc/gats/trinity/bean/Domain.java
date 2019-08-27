@@ -10,6 +10,21 @@ public class Domain {
     public Domain() {
     }
 
+    public Domain(String domainName, String domainType, int collegeId, String content) {
+        this.domainName = domainName;
+        this.domainType = domainType;
+        this.collegeId = collegeId;
+        this.content = content;
+    }
+
+    public Domain(int domainId, String domainName, String domainType, int collegeId, String content) {
+        this.domainId = domainId;
+        this.domainName = domainName;
+        this.domainType = domainType;
+        this.collegeId = collegeId;
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "Domain{" +

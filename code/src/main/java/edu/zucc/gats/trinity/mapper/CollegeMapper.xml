@@ -25,12 +25,12 @@
 
     <select id="loadCollegeByName" parameterType="String"
             resultType="edu.zucc.gats.trinity.bean.College">
-        select * from college where college_name = #{collegeName}
+        select * from college where college_name = #{colName}
     </select>
 
     <select id="loadCollegeById" parameterType="int"
             resultType="edu.zucc.gats.trinity.bean.College">
-        select * from college where college_id = #{collegeId}
+        select * from college where college_id = #{colId}
     </select>
 
     <select id="searchCollegeByKey"

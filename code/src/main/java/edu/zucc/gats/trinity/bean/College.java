@@ -10,6 +10,13 @@ public class College {
     public College() {
     }
 
+    public College(String collegeName, String province, String city, String content) {
+        this.collegeName = collegeName;
+        this.province = province;
+        this.city = city;
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "College{" +

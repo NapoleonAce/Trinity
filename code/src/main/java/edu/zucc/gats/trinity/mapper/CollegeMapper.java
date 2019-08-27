@@ -17,7 +17,7 @@ public interface CollegeMapper {
 
     College loadCollegeByName(String colName);
 
-    College loadCollegeById(String colId);
+    College loadCollegeById(int colId);
 
     //根据关键字模糊查找大学
     List<College> searchCollegeByKey(String key);
