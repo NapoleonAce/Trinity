@@ -3,11 +3,18 @@ import Router from 'vue-router'
 
 import loginView from "../views/loginView";
 import leftNav from '@/components/leftNav'
+import baseComponent from '@/components/baseComponent'
 import homeView from "../views/homeView"
+import managerView from "../views/managerView"
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path :'/baseComponent',
+      name :'baseComponent',
+      component: baseComponent
+    },
     {
       path: '/loginView',
       name: 'loginView',
@@ -22,6 +29,11 @@ export default new Router({
       path:'/homeView',
       name:'homeView',
       component:homeView
+    },
+    {
+      path:'/managerView',
+      name:'managerView',
+      component:managerView
     },
     {
       path:"*",

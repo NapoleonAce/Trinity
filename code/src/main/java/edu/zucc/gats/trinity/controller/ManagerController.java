@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/manager")
@@ -23,7 +24,7 @@ public class ManagerController {
     ManagerRoleService managerRoleService;
 
     //添加新用户
-    @RequestMapping(value = "/addNew",method = RequestMethod.POST)
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
     public RespBean addNewManager(@RequestParam("manName")String manName,
                                   @RequestParam("password")String password,
                                   @RequestParam("manCode")String manCode,
@@ -64,10 +65,10 @@ public class ManagerController {
         if (manager == null){
             return RespBean.error("用户不存在");
         }
-        if (!newManager.getPassword().equals(manager.getPassword())){
-            return RespBean.error("密码错误");
-        }
-        if (managerService.updateManager(manager) == 0){
+//        if (!newManager.getPassword().equals(manager.getPassword())){
+//            return RespBean.error("密码错误");
+//        }
+        if (managerService.updateManager(newManager) == 0){
             return RespBean.error("修改失败");
         }
         managerRole.setRoleId(roleId);
@@ -95,4 +96,14 @@ public class ManagerController {
     }
 
     //查询
+    @RequestMapping(value = "/select",method = RequestMethod.GET)
+    public RespBean getAllManager(HttpServletResponse response){
+
+        List<Manager> managerList = managerService.loadAllManagers();
+        if (managerList.get(0)==null){
+            return RespBean.error("没有任何用户");
+        }
+        return RespBean.ok("已经查找到",managerList);
+
+    }
 }
