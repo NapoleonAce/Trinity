@@ -25,7 +25,7 @@ public class testController {
 
     @RequestMapping(value = "/test",method = RequestMethod.POST)
     public RespBean testModule(){
-        
+
 
         return RespBean.ok("测试完成！");
     }

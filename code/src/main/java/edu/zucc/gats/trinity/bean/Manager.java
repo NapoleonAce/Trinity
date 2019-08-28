@@ -16,6 +16,11 @@ public class Manager  {
         this.password = password;
     }
 
+    public Manager(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
     public String getPassword() {
         return password;
     }

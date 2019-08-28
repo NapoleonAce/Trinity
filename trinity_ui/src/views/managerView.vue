@@ -38,7 +38,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleAdd(addForm)"  >保存</el-button>
+          <el-button type="primary" @click="handleAdd()"  >保存</el-button>
         </div>
       </el-dialog>
     </el-header>
@@ -84,15 +84,18 @@
               @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-dialog title="编辑信息" :visible.sync="scope.row.dialogFormVisible">
               <el-form :model="form">
-                <el-form-item label="用户名" :label-width="120">
-                  <el-input v-model="form.name" auto-complete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="角色" :label-width="120">
                   <el-select v-model="form.roleName" placeholder="选择角色">
                     <el-option label="管理员" value="管理员"></el-option>
                     <el-option label="学生" value="学生"></el-option>
                     <el-option label="院校" value="院校"></el-option>
                   </el-select>
+                </el-form-item>
+                <el-form-item label="用户名" :label-width="120">
+                  <el-input v-model="scope.row.managerName" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="新用户名" :label-width="120">
+                  <el-input v-model="form.newManName" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="旧密码" :label-width="120">
                   <el-input v-model="form.oldPassword" auto-complete="off"></el-input>
@@ -123,6 +126,7 @@
   //import leftNav from "../components/leftNav";
   import LeftNav from "@/components/leftNav";
   import baseComponent from "@/components/baseComponent"
+  import Utils from "@/utils/Utils"
   export default {
     name: "managerView",
     components: {LeftNav, baseComponent},
@@ -130,7 +134,8 @@
       return{
         addDialogVisible:false,
         form: {
-          manName: '',
+          oldManName: '',
+          newManName:'',
           oldPassword:'',
           newPassword:'',
           roleName: '',
@@ -138,7 +143,6 @@
         },
         addForm: {
           manName: '',
-          oldPassword:'',
           newPassword:'',
           roleName: '',
           roleId:''
@@ -148,7 +152,8 @@
           { text: '学生', value: '学生' },
           { text: '院校', value: '院校'}
           ],
-        managerTableData: [{
+        managerTableData: [
+          {
           managerCode: '1',
           managerName: '王小虎',
           roleName: '学生',
@@ -177,14 +182,42 @@
       }
     },
     methods: {
-      transFormRoleNameToId(manager){
-
-      },
-      handleAdd(newManger){
+      handleAdd(){
         //上传数据，并且返回新的
+        var newManager = this.addForm;
+        newManager.roleId = transformRoleNameToId(newManager.roleName)
+        console.log(newManager.roleId);
+        this.postRequest('/manager/add',{
+          manName:newManager.manName,
+          password:newManager.newPassword,
+          roleId:newManager.roleId
+        }).then(resp =>{
+          if (resp){
+            if (resp.status === 200){
+              //数据更新,利用回传的数据即可
+              this.managerTableData.add({
+                managerCode: resp.obj.code,
+                managerName: resp.obj.name,
+                roleName: newManager.roleName,
+                dialogFormVisible:false
+              })
+            }
+          }
+        })
         this.addDialogVisible  = false
       },
       handleSave(row){
+        //上传数据，并且返回新的数据
+        var _form = this.form;
+        _form.oldManName = row.managerName;
+        _form.roleId = transformRoleNameToId(_form.roleName);
+        console.log(_form.roleId)
+        this.putRequest('/manager/update',_form)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              //回传新数据
+            }
+          })
         row.dialogFormVisible = false
       },
       filterTag(value, row) {
@@ -195,7 +228,15 @@
         console.log(index, row);
       },
       handleDelete(index, row) {
+
         console.log(index, row);
+        this.deleteRequest('/manager/delete',{
+          manName:row.managerName
+        }).then(resp =>{
+          if (resp && resp.status === 200){
+            this.managerTableData.splice(index,1)
+          }
+        })
       }
     }
   }
