@@ -1,9 +1,15 @@
 <template>
 
     <el-container class="main-container" style="height: 100%;">
-      <base-component></base-component>
-      <el-main class="my-main">
 
+      <el-aside style="width: 300px">
+        <LeftNav></LeftNav>
+      </el-aside>
+
+
+
+
+      <el-main class="my-main">
       </el-main>
     </el-container>
 
@@ -11,11 +17,11 @@
 
 <script>
     //import leftNav from "../components/leftNav";
-    // import LeftNav from "@/components/leftNav";
+    import LeftNav from "@/components/leftNav";
     import baseComponent from "@/components/baseComponent"
     export default {
         name: "homeView",
-        components: {baseComponent},
+        components: {LeftNav, baseComponent},
         data(){
           return{
           }

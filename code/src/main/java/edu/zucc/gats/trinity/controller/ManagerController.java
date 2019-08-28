@@ -53,7 +53,8 @@ public class ManagerController {
     //更新用户
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
     public RespBean updateManager(@RequestParam("manName")String manName,
-                                  @RequestParam("password")String password,
+                                  @RequestParam("oldPassword")String oldPassword,
+                                  @RequestParam("newPassword")String newPassword,
                                   @RequestParam("manCode")String manCode,
                                   @RequestParam("roleId")int roleId,
                                   HttpServletResponse response){
@@ -61,13 +62,13 @@ public class ManagerController {
         //校验密码，信息修改，角色修改
         Manager manager = managerService.loadManagerByCode(manCode);
         ManagerRole managerRole = managerRoleService.loadManagerRoleByManager(manager);
-        Manager newManager = new Manager(manCode,manName,password);
+        Manager newManager = new Manager(manCode,manName,newPassword);
         if (manager == null){
             return RespBean.error("用户不存在");
         }
-//        if (!newManager.getPassword().equals(manager.getPassword())){
-//            return RespBean.error("密码错误");
-//        }
+        if (!manager.getPassword().equals(oldPassword)){
+            return RespBean.error("密码错误");
+        }
         if (managerService.updateManager(newManager) == 0){
             return RespBean.error("修改失败");
         }
@@ -98,7 +99,7 @@ public class ManagerController {
     //查询
     @RequestMapping(value = "/select",method = RequestMethod.GET)
     public RespBean getAllManager(HttpServletResponse response){
-
+        //可以返回一个List of map的形式
         List<Manager> managerList = managerService.loadAllManagers();
         if (managerList.get(0)==null){
             return RespBean.error("没有任何用户");

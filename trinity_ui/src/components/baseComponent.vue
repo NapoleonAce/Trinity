@@ -3,7 +3,7 @@
     <el-aside width="300px">
       <left-nav></left-nav>
     </el-aside>
-    <el-header class="my-header" style="text-align: left">
+    <el-header class="my-header">
       <el-menu :default-active="activeIndex" class="header-nav" mode="horizontal" >
         <el-menu-item>
           <el-input
@@ -25,7 +25,6 @@
         </el-menu-item>
       </el-menu>
     </el-header>
-
   </div>
 
 </template>
@@ -69,6 +68,7 @@
 
   .my-header{
     /*border: 1px solid #ededed;*/
+    text-align: left;
     background-color: white;
     margin-left: 300px;
     display: inline-block;
