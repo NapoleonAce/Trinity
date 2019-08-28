@@ -1,21 +1,21 @@
 package edu.zucc.gats.trinity.controller;
 
-import edu.zucc.gats.trinity.bean.*;
-import edu.zucc.gats.trinity.mapper.ManagerRoleMapper;
+
+import edu.zucc.gats.trinity.bean.RespBean;
 import edu.zucc.gats.trinity.mapper.StudentMapper;
-import edu.zucc.gats.trinity.service.*;
+import edu.zucc.gats.trinity.service.GeneralGradeService;
+import edu.zucc.gats.trinity.service.MajorGradeService;
+import edu.zucc.gats.trinity.service.SpecialityService;
+import edu.zucc.gats.trinity.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-import static java.lang.System.out;
-
 @RestController
-public class testController {
-
+@RequestMapping(value = "/student")
+public class StudentController {
+    @Autowired
+    StudentService studentService;
     @Autowired
     SpecialityService specialityService;
     @Autowired
@@ -23,11 +23,5 @@ public class testController {
     @Autowired
     MajorGradeService majorGradeService;
 
-    @RequestMapping(value = "/test",method = RequestMethod.POST)
-    public RespBean testModule(){
-        
-
-        return RespBean.ok("测试完成！");
-    }
 
 }

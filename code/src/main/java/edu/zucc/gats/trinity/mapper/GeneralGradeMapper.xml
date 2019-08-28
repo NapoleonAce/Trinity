@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.GeneralGradeMapper">
+
+    <insert id="addGeneralGrade"
+            parameterType="edu.zucc.gats.trinity.bean.GeneralGrade">
+        insert into general_grade(student_id,subject_id,grade)
+        value (#{studentId},#{subjectId},#{grade})
+    </insert>
+
+    <update id="updateGeneralGrade"
+            parameterType="edu.zucc.gats.trinity.bean.GeneralGrade">
+        update general_grade set grade = #{grade}
+        where student_id = #{studentId}
+        and  subject_id = #{subjectId}
+    </update>
+
+    <delete id="deleteGeneralGrade"
+            parameterType="edu.zucc.gats.trinity.bean.GeneralGrade">
+        delete from general_grade
+        where student_id = #{studentId}
+        and  subject_id = #{subjectId}
+    </delete>
+
+    <select id="loadGeneralGrade"
+            resultType="edu.zucc.gats.trinity.bean.GeneralGrade">
+        select * from general_grade
+        where student_id = #{studentId}
+        and  subject_id = #{subjectId}
+    </select>
+
+    <select id="loadAllGeneralGradeById"
+            resultType="edu.zucc.gats.trinity.bean.GeneralGrade">
+        select * from general_grade
+        where student_id = #{studentId}
+    </select>
+
+</mapper>

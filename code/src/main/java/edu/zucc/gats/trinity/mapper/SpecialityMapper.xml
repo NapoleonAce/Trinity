@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.SpecialityMapper">
+    <insert id="addSpeciality"
+            parameterType="edu.zucc.gats.trinity.bean.Speciality">
+      insert into speciality(student_id,spe_type,spe_level,content,evidence)
+      value (#{studentId},#{speType},#{speLevel},#{content},#{evidence})
+    </insert>
+
+    <update id="updateSpeciality"
+            parameterType="edu.zucc.gats.trinity.bean.Speciality">
+      update speciality set student_id = #{studentId},
+                            spe_type = #{speType},
+                            spe_level = #{speLevel},
+                            content = #{content},
+                            evidence = #{evidence}
+      where spe_code = #{speCode}
+    </update>
+
+    <delete id="deleteSpeciality"
+            parameterType="edu.zucc.gats.trinity.bean.Speciality">
+      delete from speciality where spe_code = #{speCode}
+    </delete>
+
+    <select id="loadSpecByStudentId"
+            resultType="edu.zucc.gats.trinity.bean.Speciality">
+      select * from speciality where student_id = #{studentId}
+    </select>
+
+
+</mapper>

@@ -50,6 +50,11 @@
             <span class="menu-item-text">个人信息</span>
         </el-menu-item>
 
+        <el-menu-item index = "6">
+          <i class="el-icon-document"></i>
+          <span class="menu-item-text">院校信息</span>
+        </el-menu-item>
+
         <el-menu-item index = "3">
           <i class="el-icon-setting"></i>
           <span class="menu-item-text">院校管理</span>
