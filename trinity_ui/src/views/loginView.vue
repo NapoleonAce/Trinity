@@ -76,8 +76,6 @@
 </template>
 
 <script>
-  import Util from "@/util/HttpUtil";
-
   export default {
     name: "loginView",
     data() {

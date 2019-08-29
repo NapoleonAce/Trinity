@@ -6,6 +6,7 @@ import leftNav from '@/components/leftNav'
 import baseComponent from '@/components/baseComponent'
 import homeView from "../views/homeView"
 import managerView from "../views/managerView"
+import stuManView from "../views/stuManView"
 Vue.use(Router)
 
 export default new Router({
@@ -34,6 +35,11 @@ export default new Router({
       path:'/managerView',
       name:'managerView',
       component:managerView
+    },
+    {
+      path:'/stuManView',
+      name:'stuManView',
+      component:stuManView
     },
     {
       path:"*",

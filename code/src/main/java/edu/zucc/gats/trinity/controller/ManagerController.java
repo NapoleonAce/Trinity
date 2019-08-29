@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.System.out;
+
 @RestController
 @RequestMapping("/manager")
 public class ManagerController {
@@ -30,13 +32,17 @@ public class ManagerController {
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public RespBean addNewManager(@RequestParam("manName")String manName,
                                   @RequestParam("password")String password,
-//                                  @RequestParam("manCode")String manCode,
+                                  @RequestParam("manCode")String manCode,
                                   @RequestParam("roleId")int roleId,
                                   HttpServletResponse response){
 
-        Manager manager = new Manager(manName,password);
+        Manager manager = new Manager(manCode,manName,password);
+        if (managerService.loadManagerByCode(manager.getCode())!=null){
+            return RespBean.error("用户代码已经存在");
+        }
+
         if (managerService.loadManagerByName(manager.getName())!=null){
-            return RespBean.error("用户已经存在");
+            return RespBean.error("用户名已经存在");
         }
 
         if (managerRoleService.loadManagerRoleByManager(manager)!=null){
@@ -47,13 +53,14 @@ public class ManagerController {
             return RespBean.error("添加失败");
         }
 
-        manager = managerService.loadManagerByName(manName);
-
         if (managerRoleService.addManagerRole(manager.getCode(),roleId) == 0){
             return RespBean.error("创建角色权限失败");
         }
         //如何回传权限……
-        return RespBean.ok("添加新用户成功！",manager);
+        List<Object> obj = new ArrayList<>();
+        obj.add(manager);
+        obj.add(roleId);
+        return RespBean.ok("添加新用户成功！",obj);
     }
 
     //更新用户
@@ -62,7 +69,7 @@ public class ManagerController {
                                   @RequestParam("oldManName")String oldManName,
                                   @RequestParam("oldPassword")String oldPassword,
                                   @RequestParam("newPassword")String newPassword,
-//                                  @RequestParam("manCode")String manCode,
+                                  @RequestParam("manCode")String manCode,
                                   @RequestParam("roleId")int roleId,
                                   HttpServletResponse response){
 
@@ -77,9 +84,11 @@ public class ManagerController {
         if (!manager.getPassword().equals(oldPassword)){
             return RespBean.error("密码错误");
         }
-        Manager newManager = new Manager(newManName,newPassword);
-        newManager.setCode(manager.getCode());
+        Manager newManager = new Manager(manCode,newManName,newPassword);
+//        newManager.setCode(manager.getCode());
+
         if (managerService.updateManager(newManager) == 0){
+            out.println(newManager.toString());
             return RespBean.error("修改失败");
         }
         ManagerRole managerRole = managerRoleService.loadManagerRoleByManager(manager);
@@ -87,7 +96,6 @@ public class ManagerController {
         if (managerRoleService.updateManagerRole(managerRole) == 0){
             return RespBean.error("修改角色权限失败");
         }
-
         //试试看
         List<Object> obj = new ArrayList<>();
         obj.add(newManager);
@@ -120,6 +128,12 @@ public class ManagerController {
         List<Manager> managerList = managerService.loadAllManagers();
         if (managerList.get(0)==null){
             return RespBean.error("没有任何用户");
+        }
+        for (int i=0;i<managerList.size();i++){
+            Manager manager = managerList.get(i);
+            ManagerRole managerRole = managerRoleService.loadManagerRoleByManager(managerList.get(i));
+            manager.setRoleId(managerRole.getRoleId());
+            managerList.set(i,manager);
         }
         return RespBean.ok("已经查找到",managerList);
 
