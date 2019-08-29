@@ -252,9 +252,7 @@
           })
         row.dialogFormVisible = false
       },
-      filterTag(value, row) {
-        return row.roleName === value;
-      },
+
       handleEdit(index, row) {
         row.dialogFormVisible = true;
         console.log(index, row);

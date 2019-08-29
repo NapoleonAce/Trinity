@@ -37,7 +37,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleAdd()"  >保存</el-button>
+          <el-button type="primary" @click="handleAddStu()"  >保存</el-button>
         </div>
       </el-dialog>
     </el-header>
@@ -88,77 +88,100 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-dialog title="编辑信息" :visible.sync="scope.row.dialogFormVisible">
-              <el-form :model="form">
-                <el-form-item label="角色" :label-width="120">
-                  <el-select v-model="form.roleName" placeholder="选择角色">
-                    <el-option label="管理员" value="管理员"></el-option>
-                    <el-option label="学生" value="学生"></el-option>
-                    <el-option label="院校" value="院校"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="用户代码" :label-width="120">
-                  <el-input v-model="scope.row.managerCode" auto-complete="off" :disabled="true"></el-input>
-                </el-form-item>
-                <el-form-item label="用户名" :label-width="120">
-                  <el-input v-model="scope.row.managerName" auto-complete="off" :disabled="true"></el-input>
-                </el-form-item>
-                <el-form-item label="新用户名" :label-width="120">
-                  <el-input v-model="form.newManName" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="旧密码" :label-width="120">
-                  <el-input v-model="form.oldPassword" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="新密码" :label-width="120">
-                  <el-input v-model="form.newPassword" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="scope.row.dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleSave(scope.row)"  >保存</el-button>
-              </div>
-            </el-dialog>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
+
         <el-table-column label="成绩">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleWatchGeneralGrade(scope.$index, scope.row)">学考</el-button>
-            <el-dialog title={{scope.row.studentName}}+"学考成绩" :visible.sync="scope.row.dialogGeneralGradeVisible">
+              @click="handleWatchGrade(scope.$index, scope.row)">查看</el-button>
+            <el-dialog title="成绩" :visible.sync="scope.row.dialogGradeVisible">
+              <el-form>
+                  <el-form-item
+                    v-for="item in scope.row.generalGrade"
+                    :key="item.subjectName"
+                    :label="item.subjectName"
+                    :label-width="120">
+                    <el-select v-model="item.grade" placeholder="请选择">
+                      <el-option
+                        v-for="level in generalGradeLevel"
+                        :key="level"
+                        :label="level.label"
+                        :value="level.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                <el-form-item
+                  v-for = "item in scope.row.majorGrade"
+                  :key="item.subjectName" :label="item.subjectName" :label-width="120">
+                  <el-input v-model="item.grade " auto-complete="off" >
+                  </el-input>
+                </el-form-item>
+              </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="scope.row.dialogGeneralGradeVisible = false">确定</el-button>
-              </div>
-            </el-dialog>
-            <el-button
-              size="mini"
-              @click="handleWatchMajorGrade(scope.$index, scope.row)">选考</el-button>
-            <el-dialog title={{scope.row.studentName}}+"学考成绩" :visible.sync="scope.row.dialogMajorGradeVisible">
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="scope.row.dialogMajorGradeVisible = false">确定</el-button>
+                <el-button @click="handleUpdateGrade(scope.row)">确定</el-button>
               </div>
             </el-dialog>
           </template>
         </el-table-column>
+
         <el-table-column label="特长">
+
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click="handleWatchSpe(scope.$index, scope.row)">查看</el-button>
-            <el-dialog title="编辑信息" :visible.sync="scope.row.dialogSpeVisible">
+            <el-dialog title="特长" :visible.sync="scope.row.dialogSpeVisible">
+              <el-form v-model="specForm">
+                <el-select v-model="value" placeholder="选择特长类别">
+                  <el-option
+                    v-for="item in scope.row.speciality"
+                    :key="scope.row.studentId + '-' + item-speCode"
+                    :label="item.speType"
+                    :value="item.speType">
+                  </el-option>
+                </el-select>
+                  <el-form-item label="特长类型" :label-width="120">
+                    <el-input v-model="specForm.speType" auto-complete="off" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="特长等级" :label-width="120">
+                    <el-input v-model="specForm.speLevel" auto-complete="off" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="特长描述" :label-width="120">
+                    <el-input v-model="specForm.content" auto-complete="off" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="特长证明" :label-width="120">
+                    <el-input v-model="specForm.evidence" auto-complete="off" ></el-input>
+                  </el-form-item>
+              </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="scope.row.dialogSpeVisible = false"> 确定</el-button>
+                <el-button @click="scope.row.dialogSpeVisible = false"> 取消</el-button>
+                <el-button @click="handleUpdateSpe(scope.row)"> 确定</el-button>
               </div>
             </el-dialog>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="详细信息">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleWatchInfo(scope.$index, scope.row)">查看</el-button>
+            <el-dialog title="编辑信息" :visible.sync="scope.row.dialogInfoVisible">
+              详细信息
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="handleUpdateInfo(scope.row)"> 确定</el-button>
+                <el-button @click="scope.row.dialogInfoVisible = false"> 取消</el-button>
+              </div>
+            </el-dialog>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -175,6 +198,24 @@
     components: {LeftNav},
     data(){
       return{
+        generalGradeLevel:[
+          {
+            value:'A',
+            label:'A'
+          },
+          {
+            value:'B',
+            label:'B'
+          },
+          {
+            value:'C',
+            label:'C'
+          },
+          {
+            value:'E',
+            label:'E'
+          },
+        ],
         addDialogVisible:false,
         dialogSpeVisible:false,
         form: {
@@ -185,6 +226,13 @@
           newPassword:'',
           roleName: '',
           roleId:''
+        },
+        specForm:{
+          speCode:'',
+          speType:'',
+          speLevel:'',
+          content:'',
+          evidence:''
         },
         addForm: {
           manCode:'',
@@ -199,9 +247,9 @@
         ],
         tableData: [
           {
-            dialogMajorGradeVisible:false,
-            dialogGeneralGradeVisible:false,
+            dialogGradeVisible:false,
             dialogFormVisible:false,
+            dialogInfoVisible:false,
             studentId: '1',
             studentName: '王小虎',
             examId: '学生',
@@ -223,10 +271,18 @@
             ],
             speciality:[
               {
-                speType:'',
-                speLevel:'',
-                content:'',
-                evidence:''
+                speCode:'11',
+                speType:'健美操',
+                speLevel:'牛逼级别',
+                content:'特别厉害的健美操，比奶茶妹妹厉害一万倍',
+                evidence:'今晚表演给你看'
+              },
+              {
+                speCode:'22',
+                speType:'篮球',
+                speLevel:'CXK级别',
+                content:'( •̀ ω •́ )练习时长两年半',
+                evidence:'B站收到了我的律师函'
               }
             ]
           }
@@ -237,17 +293,48 @@
       this.initStuData();
     },
     methods:{
+      handleDropDown(code,row){
+        //找出指定的特长，然后将其传入form中，再回传
+        console.log("code:"+code)
+        console.log("row"+row)
+        for (var i=0;i<row.speciality.length;i++){
+          if (row.speciality[i].speCode === code){
+            this.specForm = row.speciality[i];
+            break;
+          }
+        }
+        this.dialogSpeVisible = true;
+      },
       initStuData(){
 
       },
+      handleUpdateInfo(row){
+        row.dialogInfoVisible = false;
+      },
+      handleUpdateGrade(row){
+        row.dialogGradeVisible = false;
+      },
+      handleUpdateSpe(row){
+        row.dialogSpeVisible = false;
+      },
+      handleAddStu(){
+
+      },
+      handleDelete(index,row){
+
+      },
+      handleWatchInfo(index,row){
+        row.dialogInfoVisible = true;
+      },
       handleWatchSpe(index,row){
-
+        this.specForm = row.speciality[0];
+        row.dialogSpeVisible = true;
       },
-      handleWatchGeneralGrade(index,row){
-
+      handleWatchGrade(index,row){
+        row.dialogGradeVisible = true;
       },
-      handleWatchMajorGrade(index,row){
-
+      filterTag(value, row) {
+        return row.roleName === value;
       },
     }
   }
