@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/student")
 public class StudentController {
+
     @Autowired
     StudentService studentService;
     @Autowired
@@ -22,6 +23,4 @@ public class StudentController {
     GeneralGradeService generalGradeService;
     @Autowired
     MajorGradeService majorGradeService;
-
-
 }
