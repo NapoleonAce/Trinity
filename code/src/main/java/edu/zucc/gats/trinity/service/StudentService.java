@@ -29,7 +29,6 @@ public class StudentService {
     public Student loadStudentByName(String studentName){
         return studentMapper.loadStudentByName(studentName);
     }
-
     public Student loadStudentById(String studentId){
         return studentMapper.loadStudentById(studentId);
     }

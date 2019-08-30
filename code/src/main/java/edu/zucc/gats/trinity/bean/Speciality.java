@@ -17,6 +17,14 @@ public class Speciality {
         this.evidence = evidence;
     }
 
+    public Speciality(String studentId, String speType, String speLevel, String content, String evidence) {
+        this.studentId = studentId;
+        this.speType = speType;
+        this.speLevel = speLevel;
+        this.content = content;
+        this.evidence = evidence;
+    }
+
     public Speciality() {
     }
 
