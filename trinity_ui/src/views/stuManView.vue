@@ -19,27 +19,49 @@
       <el-button
         @click= "addDialogVisible = true"
         icon="el-icon-plus" circle></el-button>
-      <el-dialog title="编辑信息" :visible.sync="addDialogVisible">
-        <el-form :model="addForm">
-          <el-form-item label="用户名" :label-width="120">
-            <el-input v-model="addForm.manName" auto-complete="off"></el-input>
+      <el-drawer
+        title="添加学生信息"
+        custom-class="demo-drawer"
+        :visible.sync="addDialogVisible"
+        :direction="rtl"
+        :before-close="handleAddClose">
+        <el-form
+          class="add-student-form"
+          :model="addForm">
+          <el-form-item label="学生 ID" :label-width=120>
+            <el-input v-model="addForm.studentId" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="角色" :label-width="120">
-            <el-select v-model="addForm.roleName" placeholder="选择角色">
-              <el-option label="管理员" value="管理员"></el-option>
-              <el-option label="学生" value="学生"></el-option>
-              <el-option label="院校" value="院校"></el-option>
+          <el-form-item label="学生姓名" :label-width=120>
+            <el-input v-model="addForm.studentId" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="准考证号" :label-width=120>
+            <el-input v-model="addForm.examId" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="性别" :label-width=120>
+            <el-select v-model="addForm.gender" placeholder="选择性别">
+              <el-option label="男" value="男"></el-option>
+              <el-option label="女" value="女"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="密码" :label-width="120">
-            <el-input v-model="addForm.password" auto-complete="off"></el-input>
+          <el-form-item label="电话" :label-width=120>
+            <el-input v-model="addForm.school" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="高中" :label-width=120>
+            <el-input v-model="addForm.school" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleAddStu()"  >保存</el-button>
-        </div>
-      </el-dialog>
+<!--        <div class="demo-drawer__footer">-->
+<!--          <el-button @click="addDialogVisible = false">取 消</el-button>-->
+<!--          <el-button type="primary" @click=" $refs.drawer.closeDrawer()" :loading="addLoading">{{ addLoading ? '提交中 ...' : '确 定' }}</el-button>-->
+<!--        </div>-->
+      </el-drawer>
+
+<!--      <el-dialog title="添加信息" :visible.sync="addDialogVisible">-->
+<!--        <div slot="footer" class="dialog-footer">-->
+<!--          <el-button @click="addDialogVisible = false">取 消</el-button>-->
+<!--          <el-button type="primary" @click="handleAddStu()"  >保存</el-button>-->
+<!--        </div>-->
+<!--      </el-dialog>-->
     </el-header>
 
     <el-main class="my-main">
@@ -88,14 +110,21 @@
             </div>
           </template>
         </el-table-column>
-
         <el-table-column label="成绩">
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click="handleWatchGrade(scope.$index, scope.row)">查看</el-button>
             <el-dialog title="成绩" :visible.sync="scope.row.dialogGradeVisible">
-              <el-form>
+              <el-form class="my-grade-form">
+                <el-select v-model="gradeSelect">
+                  <el-option label="选考" value="选考"></el-option>
+                  <el-option label="学考" value="学考"></el-option>
+                </el-select>
+                <el-button @click="scope.row.selectGrade = gradeSelect">
+                  选择
+                </el-button>
+                <div v-if="scope.row.selectGrade === '学考'" style="margin-top: 30px">
                   <el-form-item
                     v-for="item in scope.row.generalGrade"
                     :key="item.subjectName"
@@ -110,12 +139,16 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                <el-form-item
-                  v-for = "item in scope.row.majorGrade"
-                  :key="item.subjectName" :label="item.subjectName" :label-width="120">
-                  <el-input v-model="item.grade " auto-complete="off" >
-                  </el-input>
-                </el-form-item>
+                </div>
+                <div v-else style="margin-top: 30px">
+                  <el-form-item
+                    v-for = "item in scope.row.majorGrade"
+                    :key="item.subjectName" :label="item.subjectName" :label-width="120">
+                    <el-input v-model="item.grade " auto-complete="off" >
+                    </el-input>
+                  </el-form-item>
+                </div>
+
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="handleUpdateGrade(scope.row)">确定</el-button>
@@ -123,51 +156,82 @@
             </el-dialog>
           </template>
         </el-table-column>
-
         <el-table-column label="特长">
-
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click="handleWatchSpe(scope.$index, scope.row)">查看</el-button>
             <el-dialog title="特长" :visible.sync="scope.row.dialogSpeVisible">
               <el-form v-model="specForm">
-                <el-select v-model="value" placeholder="选择特长类别">
-                  <el-option
-                    v-for="item in scope.row.speciality"
-                    :key="scope.row.studentId + '-' + item-speCode"
-                    :label="item.speType"
-                    :value="item.speType">
-                  </el-option>
-                </el-select>
-                  <el-form-item label="特长类型" :label-width="120">
-                    <el-input v-model="specForm.speType" auto-complete="off" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="特长等级" :label-width="120">
-                    <el-input v-model="specForm.speLevel" auto-complete="off" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="特长描述" :label-width="120">
-                    <el-input v-model="specForm.content" auto-complete="off" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="特长证明" :label-width="120">
-                    <el-input v-model="specForm.evidence" auto-complete="off" ></el-input>
-                  </el-form-item>
+                <div v-if="isSelect">
+                  <el-select v-model="scope.row.chosenType"
+                             placeholder="选择特长类别">
+                    <el-option
+                      v-for="item in scope.row.speciality"
+                      :key="item.speCode"
+                      :label="item.speType"
+                      :value="item.speType">
+                    </el-option>
+                  </el-select>
+                  <el-button @click="chooseType(scope.row)">
+                    选择
+                  </el-button>
+                  <el-button
+                    @click="clearSpeForm(scope.row)"
+                    icon="el-icon-plus" circle>
+                  </el-button>
+                </div>
+
+                <el-form-item label="特长类型" :label-width=120>
+                  <el-input v-model="specForm.speType" auto-complete="off" ></el-input>
+                </el-form-item>
+                <el-form-item label="特长等级" :label-width=120>
+                  <el-input v-model="specForm.speLevel" auto-complete="off" ></el-input>
+                </el-form-item>
+                <el-form-item label="特长描述" :label-width=120>
+                  <el-input v-model="specForm.content" auto-complete="off" ></el-input>
+                </el-form-item>
+                <el-form-item label="特长证明" :label-width=120>
+                  <el-input v-model="specForm.evidence" auto-complete="off" ></el-input>
+                </el-form-item>
               </el-form>
+
               <div slot="footer" class="dialog-footer">
-                <el-button @click="scope.row.dialogSpeVisible = false"> 取消</el-button>
-                <el-button @click="handleUpdateSpe(scope.row)"> 确定</el-button>
+                <el-button @click="handleUpdateSpe(scope.row)">确定</el-button>
               </div>
             </el-dialog>
           </template>
         </el-table-column>
-
         <el-table-column label="详细信息">
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click="handleWatchInfo(scope.$index, scope.row)">查看</el-button>
             <el-dialog title="编辑信息" :visible.sync="scope.row.dialogInfoVisible">
-              详细信息
+              <el-form
+                :model="form">
+                <el-form-item label="学生 ID" :label-width=120>
+                  <el-input v-model="form.studentId" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="学生姓名" :label-width=120>
+                  <el-input v-model="form.studentName" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="性别" :label-width=120>
+                  <el-select v-model="form.gender" placeholder="选择性别">
+                    <el-option label="男" value="男"></el-option>
+                    <el-option label="女" value="女"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="准考证号" :label-width=120>
+                  <el-input v-model="form.examId" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="电话" :label-width=120>
+                  <el-input v-model="form.phone" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="高中" :label-width=120>
+                  <el-input v-model="form.school" auto-complete="off"></el-input>
+                </el-form-item>
+              </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="handleUpdateInfo(scope.row)"> 确定</el-button>
                 <el-button @click="scope.row.dialogInfoVisible = false"> 取消</el-button>
@@ -175,7 +239,6 @@
             </el-dialog>
           </template>
         </el-table-column>
-
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -198,6 +261,9 @@
     components: {LeftNav},
     data(){
       return{
+        isSelect:true,
+        addLoading:false,
+        gradeSelect:'学考',
         generalGradeLevel:[
           {
             value:'A',
@@ -217,15 +283,13 @@
           },
         ],
         addDialogVisible:false,
-        dialogSpeVisible:false,
         form: {
-          manCode:'',
-          oldManName: '',
-          newManName:'',
-          oldPassword:'',
-          newPassword:'',
-          roleName: '',
-          roleId:''
+          studentId:'',
+          studentName: '',
+          examId:'',
+          gender: '',
+          phone:'',
+          school:''
         },
         specForm:{
           speCode:'',
@@ -235,11 +299,12 @@
           evidence:''
         },
         addForm: {
-          manCode:'',
-          manName: '',
-          newPassword:'',
-          roleName: '',
-          roleId:''
+          studentId:'',
+          studentName: '',
+          examId:'',
+          gender: '',
+          phone:'',
+          school:''
         },
         filterList:[
           { text: '男', value: '男' },
@@ -247,9 +312,12 @@
         ],
         tableData: [
           {
+            selectGrade:'学考',
+            chosenType:'',
             dialogGradeVisible:false,
             dialogFormVisible:false,
             dialogInfoVisible:false,
+            dialogSpeVisible:false,
             studentId: '1',
             studentName: '王小虎',
             examId: '学生',
@@ -259,26 +327,72 @@
             province:'天际',
             generalGrade:[
               {
-                subjectName:'',
-                grade:''
-              }
+                subjectName:'数学',
+                grade:'A'
+              },
+              {
+                subjectName:'语文',
+                grade:'B'
+              },
+              {
+                subjectName:'英语',
+                grade:'B'
+              },
+              {
+                subjectName:'技术',
+                grade:'B'
+              },
+              {
+                subjectName:'历史',
+                grade:'B'
+              },
+              {
+                subjectName:'地理',
+                grade:'B'
+              },
+              {
+                subjectName:'政治',
+                grade:'B'
+              },
+
             ],
             majorGrade:[
               {
-                subjectName:'',
-                grade:''
-              }
+                subjectName:'数学',
+                grade:120
+              },
+              {
+                subjectName:'英语',
+                grade:120
+              },
+              {
+                subjectName:'语文',
+                grade:120
+              },
+              {
+                subjectName:'物理',
+                grade:91
+              },
+              {
+                subjectName:'化学',
+                grade:97
+              },
+              {
+                subjectName:'生物',
+                grade:97
+              },
+
             ],
             speciality:[
               {
-                speCode:'11',
+                speCode:1,
                 speType:'健美操',
                 speLevel:'牛逼级别',
                 content:'特别厉害的健美操，比奶茶妹妹厉害一万倍',
                 evidence:'今晚表演给你看'
               },
               {
-                speCode:'22',
+                speCode:2,
                 speType:'篮球',
                 speLevel:'CXK级别',
                 content:'( •̀ ω •́ )练习时长两年半',
@@ -293,20 +407,19 @@
       this.initStuData();
     },
     methods:{
-      handleDropDown(code,row){
-        //找出指定的特长，然后将其传入form中，再回传
-        console.log("code:"+code)
-        console.log("row"+row)
-        for (var i=0;i<row.speciality.length;i++){
-          if (row.speciality[i].speCode === code){
-            this.specForm = row.speciality[i];
-            break;
-          }
-        }
-        this.dialogSpeVisible = true;
-      },
       initStuData(){
 
+      },
+      handleAddClose(done){
+        this.$confirm('是否需要保存？')
+          .then(_ => {
+            this.addLoading = true;
+            setTimeout(()=>{
+              this.addLoading = false;
+              done();
+            },2000);
+          })
+          .catch(_ => {});
       },
       handleUpdateInfo(row){
         row.dialogInfoVisible = false;
@@ -315,19 +428,23 @@
         row.dialogGradeVisible = false;
       },
       handleUpdateSpe(row){
+        if(this.isSelect){
+          //update
+        }else{
+          //insert
+        }
         row.dialogSpeVisible = false;
-      },
-      handleAddStu(){
-
       },
       handleDelete(index,row){
 
       },
       handleWatchInfo(index,row){
+        this.form = row;
         row.dialogInfoVisible = true;
       },
       handleWatchSpe(index,row){
         this.specForm = row.speciality[0];
+        row.chosenType = row.speciality[0].speType;
         row.dialogSpeVisible = true;
       },
       handleWatchGrade(index,row){
@@ -336,12 +453,39 @@
       filterTag(value, row) {
         return row.roleName === value;
       },
+      clearSpeForm(row){
+        var _specForm = {
+          speCode:'',
+          speType:'',
+          speLevel:'',
+          content:'',
+          evidence:''
+        };
+        row.chosenType = "";
+        this.specForm = _specForm;
+        this.isSelect = false;
+      },
+      chooseType(row){
+        //改变specForm
+        console.log(row.chosenType);
+        console.log(row);
+        for (var i=0;i<row.speciality.length;i++){
+          console.log(row.speciality[i]);
+          if (row.speciality[i].speType === row.chosenType){
+            this.specForm = row.speciality[i];
+            break;
+          }
+        }
+      },
     }
   }
 
 </script>
 
 <style scoped>
+  .add-student-form{
+    padding: 20px 20px 20px 20px;
+  }
   .my-main{
     margin-left: 300px;
     margin-top: 2%;
@@ -374,5 +518,9 @@
     width:80%;
     padding: 1%;
     z-index: 2;
+  }
+  .my-grade-form{
+    display: inline-block;
+
   }
 </style>
