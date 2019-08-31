@@ -7,10 +7,16 @@ import baseComponent from '@/components/baseComponent'
 import homeView from "../views/homeView"
 import managerView from "../views/managerView"
 import stuManView from "../views/stuManView"
+import colView from "../views/colView"
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path :'/colView',
+      name :'colView',
+      component: colView
+    },
     {
       path :'/baseComponent',
       name :'baseComponent',

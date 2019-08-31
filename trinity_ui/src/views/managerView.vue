@@ -121,7 +121,6 @@
               type="danger"
               @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
-
         </el-table-column>
       </el-table>
     </el-main>
@@ -132,11 +131,11 @@
 <script>
   //import leftNav from "../components/leftNav";
   import LeftNav from "@/components/leftNav";
-  import baseComponent from "@/components/baseComponent"
+  // import baseComponent from "@/components/baseComponent"
   import Utils from "@/utils/Utils"
   export default {
     name: "managerView",
-    components: {LeftNav, baseComponent},
+    components: {LeftNav},
     data(){
       return{
         addDialogVisible:false,

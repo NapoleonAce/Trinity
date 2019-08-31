@@ -1,0 +1,330 @@
+<template>
+<!--单个院校进入的界面
+    首先知道自己的是个什么院校
+    然后知道自己的招生计划
+    将搜索栏旁边的东西改成几几年的select,可以进行添加
+    再添加一个按钮可以查看报名计划-->
+  <el-container class="main-container" style="height: 100%;">
+    <el-aside style="width: 300px">
+      <LeftNav></LeftNav>
+    </el-aside>
+    <el-header class="my-header" >
+      <el-input
+        class="my-header-search"
+        placeholder="请输入搜索内容"
+        prefix-icon="el-icon-search">
+        <el-select v-model="selectType" slot="prepend" placeholder="请选择" style="width: 120px">
+          <el-option label="用户名" value="1"></el-option>
+          <el-option label="用户码" value="2"></el-option>
+        </el-select>
+        <el-button slot="append" icon="el-icon-search"></el-button>
+      </el-input>
+
+      <el-button
+        @click= "addEnrollDialogVisible = true"
+        >添加计划</el-button>
+      <el-dialog title="添加计划" :visible.sync="addEnrollDialogVisible">
+        <el-form :model="addEnrollForm">
+          <el-form-item label="年份" :label-width="120">
+            <el-input v-model="addEnrollForm.year" auto-complete="off" disable="true"></el-input>
+          </el-form-item>
+          <el-form-item label="专业名" :label-width="120">
+            <el-input v-model="addEnrollForm.domainName" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="选考科目" :label-width="120">
+            <el-input v-model="addEnrollForm.subjectReq" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="计划人数" :label-width="120">
+            <el-input v-model="addEnrollForm.number" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="学费" :label-width="120">
+            <el-input v-model="addEnrollForm.price" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addEnrollDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleAddEnroll()"  >添 加</el-button>
+        </div>
+      </el-dialog>
+      <el-button @click="handleWatchApplyInfo">报名信息</el-button>
+      <el-dialog title="报名信息" :visible.sync="applyDialogVisible">
+        <el-form :model="applyInfoForm">
+          <el-form-item label="报名信息ID" :label-width="120">
+            <el-input v-model="applyInfoForm.applyInfoId" auto-complete="off" disable="true"></el-input>
+          </el-form-item>
+          <el-form-item label="报名方式" :label-width="120">
+            <el-input v-model="applyInfoForm.applyWay" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="报名条件" :label-width="120">
+            <el-input v-model="applyInfoForm.applyCondition" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="报名开始时间" :label-width="120">
+            <el-date-picker
+              v-model="applyInfoForm.applyBegin"
+              type="datetime"
+              placeholder="选择日期时间">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="报名结束时间" :label-width="120">
+            <el-date-picker
+              v-model="applyInfoForm.applyFinish"
+              type="datetime"
+              placeholder="选择日期时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="applyDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleAdd()"  >保存</el-button>
+        </div>
+      </el-dialog>
+    </el-header>
+
+    <el-main class="my-main">
+      <el-table
+        :data="enrollData"
+        style="width: 100%">
+        <el-table-column
+          label="专业名"
+          width="180">
+          <template slot-scope="scope">
+            <i class="el-icon-tickets"></i>
+            <span style="margin-left: 10px">{{ scope.row.domainName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="类别"
+          width="180">
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              {{ scope.row.domainType }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="选课条件"
+          width="180">
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              {{ scope.row.subjectReq }}
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          label="计划招生"
+          width="180">
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              {{ scope.row.number }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="费用"
+          width="180">
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              {{ scope.row.price }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="所在省"
+          width="180"
+          >
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              <el-tag>{{ scope.row.province }}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="所在城市"
+          width="180">
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              <el-tag>{{ scope.row.city }}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-dialog title="编辑信息" :visible.sync="scope.row.dialogFormVisible">
+              <el-form :model="form">
+                <el-form-item label="专业名" :label-width="120">
+                </el-form-item>
+                <el-form-item label="用户代码" :label-width="120">
+                  <el-input v-model="scope.row.managerCode" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" :label-width="120">
+                  <el-input v-model="scope.row.managerName" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="新用户名" :label-width="120">
+                  <el-input v-model="form.newManName" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="旧密码" :label-width="120">
+                  <el-input v-model="form.oldPassword" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="新密码" :label-width="120">
+                  <el-input v-model="form.newPassword" auto-complete="off"></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="scope.row.dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleSave(scope.row)"  >保存</el-button>
+              </div>
+            </el-dialog>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+
+
+      </el-table>
+    </el-main>
+
+
+  </el-container>
+</template>
+
+<script>
+  import LeftNav from "@/components/leftNav";
+  // import baseComponent from "@/components/baseComponent"
+  import Utils from "@/utils/Utils"
+    export default {
+      name: "colView",
+      components:{LeftNav},
+      data(){
+        return {
+          addEnrollDialogVisible:false,
+          applyDialogVisible:false,
+          addDomainDialogVisible:false,
+          editEnrollDialogVisible:false,
+          applyInfoForm:{
+            collegeId:1,
+            applyInfoId:2,
+            applyWay:'',
+            applyCondition:'',
+            applyBegin:'',
+            applyFinish:''
+          },
+          addEnrollForm: {
+            domainName:'',
+            year:2019,
+            subjectReq:"",
+            number:0,
+            price:0
+          },
+          addForm: {
+            manCode:'',
+            manName: '',
+            newPassword:'',
+            roleName: '',
+            roleId:''
+          },
+          form:{
+            domainId:0,
+            domainName:'',
+            domainType:'',
+            subjectReq:"",
+            year:0,
+            number:0,
+            price:0
+          },
+          filterList:[
+            { text: '管理员', value: '管理员' },
+            { text: '学生', value: '学生' },
+            { text: '院校', value: '院校'}
+          ],
+          enrollData: [
+            {
+              domainId:8,
+              domainName:'母猪产后护理',
+              domainType:'农业',
+              subjectReq:"政治历史地理",
+              year:2019,
+              number:10,
+              price:5000.0
+            },
+            {
+              domainId:9,
+              domainName:'母猪产后护理',
+              domainType:'商业',
+              subjectReq:"政治历史地理",
+              year:2019,
+              number:10,
+              price:5000.0
+            },
+            {
+              domainId:10,
+              domainName:'母猪产后护理',
+              domainType:'农业',
+              subjectReq:"政治历史地理",
+              year:2019,
+              number:10,
+              price:5000.0
+            },
+            ]
+        }
+      },
+      methods:{
+        changeEditPlanYear(row){
+          //将计划中的form进行修改
+        },
+        handleWatchApplyInfo(){
+          //dialog查看，默认是今年的
+          this.applyDialogVisible = true;
+        },
+        handleWatchAddPlan(){
+          this.addEnrollDialogVisible = true;
+        },
+        handleAddEnroll(){
+          this.addEnrollDialogVisible = false;
+        }
+      }
+  }
+</script>
+
+<style scoped>
+  .my-main{
+    margin-left: 300px;
+    margin-top: 2%;
+  }
+  .main-container{
+    height: 100%;
+    padding-left: 0px;
+    top:0;
+    width: 100%;
+    background-color: white;
+  }
+  .my-header-search{
+    margin-right: 50px;
+    width: 500px;
+  }
+  .main-container{
+    height: 100%;
+    padding-left: 0px;
+    top:0;
+    width: 100%;
+    background-color: white;
+  }
+  .my-header{
+    /*border: 1px solid #ededed;*/
+    text-align: left;
+    background-color: white;
+    margin-left: 300px;
+    display: inline-block;
+    top:0;
+    width:80%;
+    padding: 1%;
+    z-index: 2;
+  }
+
+</style>
