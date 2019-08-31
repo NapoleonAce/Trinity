@@ -12,6 +12,13 @@ public class Enroll {
     public Enroll() {
     }
 
+    public Enroll(int year, String subjectReq, int number, float price) {
+        this.year = year;
+        this.subjectReq = subjectReq;
+        this.number = number;
+        this.price = price;
+    }
+
     public Enroll(int domainId, int year, String subjectReq, int number, float price) {
         this.domainId = domainId;
         this.year = year;

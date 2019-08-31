@@ -22,4 +22,7 @@ public interface DomainMapper {
     List<Domain> searchDomainByKey(String key);
     
     List<Domain> loadAllDomainByPage(@Param("begin") int begin,@Param("offset") int offset);
+
+    List<Domain> loadDomainByCol(int collegeId);
+
 }

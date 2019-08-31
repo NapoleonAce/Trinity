@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.ApplyInfoMapper">
+    <insert id="addNewApplyInfo"
+            parameterType="edu.zucc.gats.trinity.bean.ApplyInfo">
+        insert into apply_info(college_id,apply_way,apply_condition,
+                               apply_begin,apply_finish)
+        value (#{collegeId},#{applyWay},#{applyCondition},#{applyBegin},#{applyFinish})
+    </insert>
+
+    <update id="updateApplyInfo" parameterType="edu.zucc.gats.trinity.bean.ApplyInfo">
+        update apply_info set apply_way = #{applyWay},
+                              apply_condition = #{applyCondition},
+                              apply_begin = #{applyBegin},
+                              apply_finish = #{applyFinish}
+        where apply_info_id = #{applyInfoId}
+    </update>
+
+    <delete id="deleteApplyInfo"
+            parameterType="edu.zucc.gats.trinity.bean.ApplyInfo">
+        delete from apply_info where apply_info_id = #{applyInfoId}
+    </delete>
+
+    <select id="loadApplyByColId" parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.ApplyInfo">
+        select * from apply_info where college_id = #{collegeId}
+    </select>
+
+</mapper>

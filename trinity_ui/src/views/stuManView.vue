@@ -144,7 +144,7 @@
                   <el-form-item
                     v-for = "item in scope.row.majorGrade"
                     :key="item.subjectName" :label="item.subjectName" :label-width="120">
-                    <el-input v-model="item.grade " auto-complete="off" >
+                    <el-input v-model="item.score " auto-complete="off" >
                     </el-input>
                   </el-form-item>
                 </div>
@@ -359,27 +359,27 @@
             majorGrade:[
               {
                 subjectName:'数学',
-                grade:120
+                score:120
               },
               {
                 subjectName:'英语',
-                grade:120
+                score:120
               },
               {
                 subjectName:'语文',
-                grade:120
+                score:120
               },
               {
                 subjectName:'物理',
-                grade:91
+                score:91
               },
               {
                 subjectName:'化学',
-                grade:97
+                score:97
               },
               {
                 subjectName:'生物',
-                grade:97
+                score:97
               },
 
             ],
