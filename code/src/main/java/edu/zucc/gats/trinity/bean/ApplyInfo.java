@@ -29,6 +29,14 @@ public class ApplyInfo {
         this.applyFinish = applyFinish;
     }
 
+    public ApplyInfo(int collegeId, String applyWay, String applyCondition, Date applyBegin, Date applyFinish) {
+        this.collegeId = collegeId;
+        this.applyWay = applyWay;
+        this.applyCondition = applyCondition;
+        this.applyBegin = applyBegin;
+        this.applyFinish = applyFinish;
+    }
+
     @Override
     public String toString() {
         return "ApplyInfo{" +

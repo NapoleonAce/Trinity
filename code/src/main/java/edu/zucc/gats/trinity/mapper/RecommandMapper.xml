@@ -6,19 +6,19 @@
     <insert id="addNewReco"
             parameterType="edu.zucc.gats.trinity.bean.Recommand">
         insert into recommand(student_id,domain_id,reason)
-        value (#{studentId}.#{domainId},#{reason})
+        value (#{studentId},#{domainId},#{reason})
     </insert>
 
     <update id="updateReco"
             parameterType="edu.zucc.gats.trinity.bean.Recommand">
         update recommand set
                              reason = #{reason}
-        where student_id = #{studentId} and domain_id = #{domain_id}
+        where student_id = #{studentId} and domain_id = #{domainId}
     </update>
 
     <delete id="deleteReco"
             parameterType="edu.zucc.gats.trinity.bean.Recommand">
-        delete from recommand where student_id = #{studentId} and domain_id = #{domain_id}
+        delete from recommand where student_id = #{studentId} and domain_id = #{domainId}
     </delete>
 
     <select id="loadAllRecoByStuId"
