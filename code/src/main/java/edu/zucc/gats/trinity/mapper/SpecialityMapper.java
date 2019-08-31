@@ -17,4 +17,6 @@ public interface SpecialityMapper {
 
     List<Speciality> loadSpecByStudentId(String studentId);
 
+    Speciality loadSpeBySpeCode(int speCode);
+
 }

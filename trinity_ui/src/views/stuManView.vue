@@ -19,7 +19,7 @@
       <el-button
         @click= "addDialogVisible = true"
         icon="el-icon-plus" circle></el-button>
-      <el-drawer
+      <el-dialog
         title="添加学生信息"
         custom-class="demo-drawer"
         :visible.sync="addDialogVisible"
@@ -44,17 +44,18 @@
             </el-select>
           </el-form-item>
           <el-form-item label="电话" :label-width=120>
-            <el-input v-model="addForm.school" auto-complete="off"></el-input>
+            <el-input v-model="addForm.phone" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="高中" :label-width=120>
             <el-input v-model="addForm.school" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
+
 <!--        <div class="demo-drawer__footer">-->
 <!--          <el-button @click="addDialogVisible = false">取 消</el-button>-->
 <!--          <el-button type="primary" @click=" $refs.drawer.closeDrawer()" :loading="addLoading">{{ addLoading ? '提交中 ...' : '确 定' }}</el-button>-->
 <!--        </div>-->
-      </el-drawer>
+      </el-dialog>
 
 <!--      <el-dialog title="添加信息" :visible.sync="addDialogVisible">-->
 <!--        <div slot="footer" class="dialog-footer">-->
@@ -181,7 +182,6 @@
                     icon="el-icon-plus" circle>
                   </el-button>
                 </div>
-
                 <el-form-item label="特长类型" :label-width=120>
                   <el-input v-model="specForm.speType" auto-complete="off" ></el-input>
                 </el-form-item>

@@ -18,7 +18,7 @@ public interface GeneralGradeMapper {
     int deleteGeneralGrade(GeneralGrade generalGrade);
 
     GeneralGrade loadGeneralGrade(@Param("studentId") String studentId,
-                                  @Param("subjectId") String subjectId);
+                                  @Param("subjectId") int subjectId);
 
     List<GeneralGrade> loadAllGeneralGradeById(String studentId);
 }

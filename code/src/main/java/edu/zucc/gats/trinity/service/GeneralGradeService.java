@@ -28,7 +28,7 @@ public class GeneralGradeService {
     }
 
 
-    public GeneralGrade loadGeneralGrade( String studentId, String subjectId){
+    public GeneralGrade loadGeneralGrade( String studentId, int subjectId){
         return generalGradeMapper.loadGeneralGrade(studentId, subjectId);
     }
 

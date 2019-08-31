@@ -32,44 +32,15 @@ public class testController {
     @Autowired
     RecommandService recommandService;
 
+    @Autowired
+    StudentService studentService;
 
     @RequestMapping(value = "/test",method = RequestMethod.POST)
     public RespBean testModule() throws ParseException {
 
-        out.println("添加报名信息");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String beginDate = "2019-09-09 00:00:00";
-        String finishDate = "2019-09-11 00:00:00";
-        for (int i=0;i<3;i++){
-            ApplyInfo applyInfo = new ApplyInfo(
-                    2,"去索瑟姆群岛搞死龙裔","去索瑟姆群岛搞死龙裔",
-                    sdf.parse(beginDate),sdf.parse(finishDate)
-            );
-            applyInfoService.addNewApplyInfo(applyInfo);
-        }
-
-        out.println("查询报名信息");
-        List<ApplyInfo> applyInfoList = applyInfoService.loadApplyByColId(2);
-        for (ApplyInfo applyInfo:applyInfoList){
-            out.println(applyInfo.toString());
-        }
-
-        out.println("更改报名信息");
-        for (ApplyInfo applyInfo:applyInfoList){
-            applyInfo.setApplyCondition("?????");
-            applyInfoService.updateApplyInfo(applyInfo);
-        }
-
-        out.println("查询报名信息");
-        List<ApplyInfo> applyInfoList2 = applyInfoService.loadApplyByColId(2);
-        for (ApplyInfo applyInfo:applyInfoList2){
-            out.println(applyInfo.toString());
-        }
-
-        out.println("删除报名信息");
-        for (ApplyInfo applyInfo:applyInfoList2){
-            out.println(applyInfoService.deleteApplyInfo(applyInfo));
-        }
+        String stuId = "3306";
+        Student student = studentService.loadStudentById(stuId);
+        out.println(student.toString());
 
         return RespBean.ok("测试完成！");
     }

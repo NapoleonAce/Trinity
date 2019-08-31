@@ -16,7 +16,7 @@ public interface MajorGradeMapper {
     int deleteMajorGrade(MajorGrade majorGrade);
 
     MajorGrade loadMajorGrade(@Param("studentId") String studentId,
-                              @Param("subjectId") String subjectId);
+                              @Param("subjectId") int subjectId);
 
     List<MajorGrade> loadAllMajorGradeById(String studentId);
 

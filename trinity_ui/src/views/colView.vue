@@ -78,6 +78,9 @@
           <el-button type="primary" @click="handleAdd()"  >保存</el-button>
         </div>
       </el-dialog>
+
+      <el-button>专业管理</el-button>
+
     </el-header>
 
     <el-main class="my-main">
@@ -129,26 +132,6 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          label="所在省"
-          width="180"
-          >
-          <template slot-scope="scope">
-            <div slot="reference" class="name-wrapper">
-              <el-tag>{{ scope.row.province }}</el-tag>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="所在城市"
-          width="180">
-          <template slot-scope="scope">
-            <div slot="reference" class="name-wrapper">
-              <el-tag>{{ scope.row.city }}</el-tag>
-            </div>
-          </template>
-        </el-table-column>
-
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -156,22 +139,20 @@
               @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-dialog title="编辑信息" :visible.sync="scope.row.dialogFormVisible">
               <el-form :model="form">
+                <el-form-item label="年份" :label-width="120">
+                  <el-input v-model="form.year" auto-complete="off" :disable="true"></el-input>
+                </el-form-item>
                 <el-form-item label="专业名" :label-width="120">
+                  <el-input v-model="form.domainName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="用户代码" :label-width="120">
-                  <el-input v-model="scope.row.managerCode" auto-complete="off" :disabled="true"></el-input>
+                <el-form-item label="专业类别" :label-width="120">
+                  <el-input v-model="form.domainType" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="用户名" :label-width="120">
-                  <el-input v-model="scope.row.managerName" auto-complete="off" :disabled="true"></el-input>
+                <el-form-item label="计划数" :label-width="120">
+                  <el-input v-model="form.number" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="新用户名" :label-width="120">
-                  <el-input v-model="form.newManName" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="旧密码" :label-width="120">
-                  <el-input v-model="form.oldPassword" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="新密码" :label-width="120">
-                  <el-input v-model="form.newPassword" auto-complete="off"></el-input>
+                <el-form-item label="学费" :label-width="120">
+                  <el-input v-model="form.price" auto-complete="off"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -245,6 +226,7 @@
           ],
           enrollData: [
             {
+              dialogFormVisible:false,
               domainId:8,
               domainName:'母猪产后护理',
               domainType:'农业',
@@ -254,6 +236,7 @@
               price:5000.0
             },
             {
+              dialogFormVisible:false,
               domainId:9,
               domainName:'母猪产后护理',
               domainType:'商业',
@@ -263,6 +246,7 @@
               price:5000.0
             },
             {
+              dialogFormVisible:false,
               domainId:10,
               domainName:'母猪产后护理',
               domainType:'农业',
@@ -287,7 +271,16 @@
         },
         handleAddEnroll(){
           this.addEnrollDialogVisible = false;
-        }
+        },
+        handleEdit(index,row){
+          row.dialogFormVisible = true;
+        },
+        handleSave(row){
+          row.dialogFormVisible = false;
+        },
+        handleDelete(index,row){
+        },
+
       }
   }
 </script>

@@ -28,4 +28,7 @@ public class SpecialityService {
         return specialityMapper.loadSpecByStudentId(studentId);
     }
 
+    public Speciality loadSpeBySpeCode(int speCode){
+        return specialityMapper.loadSpeBySpeCode(speCode);
+    }
 }

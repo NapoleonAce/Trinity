@@ -29,5 +29,10 @@
       select * from speciality where student_id = #{studentId}
     </select>
 
+    <select id="loadSpeBySpeCode"
+            resultType="edu.zucc.gats.trinity.bean.Speciality">
+        select * from speciality where spe_code = #{speCode}
+    </select>
+
 
 </mapper>

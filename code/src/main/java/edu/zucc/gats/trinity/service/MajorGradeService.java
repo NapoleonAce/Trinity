@@ -25,7 +25,7 @@ public class MajorGradeService {
         return majorGradeMapper.deleteMajorGrade(majorGrade);
     }
 
-    public MajorGrade loadMajorGrade( String studentId, String subjectId){
+    public MajorGrade loadMajorGrade( String studentId, int subjectId){
         return majorGradeMapper.loadMajorGrade(studentId, subjectId);
     }
 

@@ -2,8 +2,16 @@ package edu.zucc.gats.trinity.bean;
 
 public class GeneralGrade {
     private String studentId;
+    private Student subjectName;
     private int subjectId;
     private String grade;
+
+    public GeneralGrade(String studentId, Student subjectName, int subjectId, String grade) {
+        this.studentId = studentId;
+        this.subjectName = subjectName;
+        this.subjectId = subjectId;
+        this.grade = grade;
+    }
 
     public GeneralGrade(String studentId, int subjectId, String grade) {
         this.studentId = studentId;
@@ -18,6 +26,7 @@ public class GeneralGrade {
     public String toString() {
         return "GeneralGrade{" +
                 "studentId='" + studentId + '\'' +
+                ", subjectName=" + subjectName +
                 ", subjectId=" + subjectId +
                 ", grade='" + grade + '\'' +
                 '}';
