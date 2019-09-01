@@ -8,10 +8,22 @@ import homeView from "../views/homeView"
 import managerView from "../views/managerView"
 import stuManView from "../views/stuManView"
 import colView from "../views/colView"
+import colDomView from "@/views/colDomView";
+import stuSelect from "@/views/stuSelect";
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path:'/stuSelect',
+      name:'stuSelect',
+      component:stuSelect
+    },
+    {
+      path:'/colDom',
+      name:'colDom',
+      component:colDomView
+    },
     {
       path :'/colView',
       name :'colView',
