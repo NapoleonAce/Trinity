@@ -2,24 +2,32 @@ package edu.zucc.gats.trinity.bean;
 
 public class GeneralGrade {
     private String studentId;
-    private Student subjectName;
+    private String subjectName;
     private int subjectId;
     private String grade;
 
-    public GeneralGrade(String studentId, Student subjectName, int subjectId, String grade) {
+    public GeneralGrade(String studentId, String subjectName, int subjectId, String grade) {
         this.studentId = studentId;
         this.subjectName = subjectName;
         this.subjectId = subjectId;
         this.grade = grade;
     }
 
-    public GeneralGrade(String studentId, int subjectId, String grade) {
-        this.studentId = studentId;
-        this.subjectId = subjectId;
-        this.grade = grade;
-    }
+//    public GeneralGrade(String studentId, int subjectId, String grade) {
+//        this.studentId = studentId;
+//        this.subjectId = subjectId;
+//        this.grade = grade;
+//    }
 
     public GeneralGrade() {
+    }
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
     @Override

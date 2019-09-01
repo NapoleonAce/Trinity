@@ -12,14 +12,23 @@ public class MajorGrade {
         this.subjectId = subjectId;
         this.score = score;
     }
-
-    public MajorGrade(String studentId, int subjectId, int score) {
-        this.studentId = studentId;
-        this.subjectId = subjectId;
-        this.score = score;
-    }
+//
+//    public MajorGrade(String studentId, int subjectId, int score) {
+//        this.studentId = studentId;
+//        this.subjectId = subjectId;
+//        this.score = score;
+//    }
 
     public MajorGrade() {
+    }
+
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
     @Override

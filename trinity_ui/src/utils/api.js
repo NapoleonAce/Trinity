@@ -76,6 +76,16 @@ export const putRequest = (url, params) => {
     }
   });
 }
+export const putRequestTest = (url,params) =>{
+  return axios({
+    method: 'put',
+    url: `${base}${url}`,
+    data: params,
+    headers:{
+      'Content-Type':'application/json; charset=utf-8'
+    }
+  })
+}
 export const deleteRequest = (url,params) => {
   return axios({
     method: 'delete',
@@ -97,5 +107,20 @@ export const getRequest = (url) => {
   return axios({
     method: 'get',
     url: `${base}${url}`
+  });
+}
+
+export const getRequestBydata = (url,params) => {
+  return axios({
+    method: 'get',
+    url: `${base}${url}`,
+    data: params,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      return ret
+    }],
   });
 }

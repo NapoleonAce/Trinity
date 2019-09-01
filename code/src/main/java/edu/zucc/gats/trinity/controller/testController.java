@@ -35,6 +35,12 @@ public class testController {
     @Autowired
     StudentService studentService;
 
+    @Autowired
+    GeneralGradeService generalGradeService;
+
+    @Autowired
+    MajorGradeService majorGradeService;
+
     @RequestMapping(value = "/test",method = RequestMethod.POST)
     public RespBean testModule() throws ParseException {
 
@@ -42,6 +48,10 @@ public class testController {
         Student student = studentService.loadStudentById(stuId);
         out.println(student.toString());
 
+        List<MajorGrade> majorGradeList = majorGradeService.loadAllMajorGradeById(stuId);
+        for (MajorGrade majorGrade:majorGradeList){
+            out.println(majorGrade.toString());
+        }
         return RespBean.ok("测试完成！");
     }
 

@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.System.out;
+
 @RestController
 @RequestMapping(value = "/stuMan")
 public class StudentController {
@@ -39,14 +41,15 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/select/grade",method = RequestMethod.GET)
-    public RespBean getStudentGrade(String studentId){
+    public RespBean getStudentGrade(@RequestParam("studentId") String studentId){
         //返回所有成绩
+//        out.println(studentId);
         List<GeneralGrade> generalGradeList = generalGradeService.loadAllGeneralGradeById(studentId);
         List<MajorGrade> majorGradeList = majorGradeService.loadAllMajorGradeById(studentId);
-        if (generalGradeList.get(0) == null){
+        if (generalGradeList.size() == 0){
             return RespBean.error("没有任何学考成绩");
         }
-        if (majorGradeList.get(0) == null){
+        if (majorGradeList.size() == 0){
             return RespBean.error("没有任何选考成绩");
         }
         GradeUnion gradeUnion = new GradeUnion(generalGradeList,majorGradeList);
@@ -57,7 +60,8 @@ public class StudentController {
     public RespBean getStudentSpe(String studentId){
 
         List<Speciality> specialityList = specialityService.loadSpecByStudentId(studentId);
-        if (specialityList.get(0)==null){
+//        out.println(specialityList.size());
+        if (specialityList.size() == 0){
             return RespBean.error("没有任何特长");
         }
         return RespBean.ok("加载特长成功！",specialityList);
@@ -99,18 +103,27 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/add/spe",method = RequestMethod.POST)
-    public RespBean addNewSpe(Speciality speciality){
+    public RespBean addNewSpe(@RequestParam("speType")String speType,
+                              @RequestParam("speLevel")String speLevel,
+                              @RequestParam("content")String content,
+                              @RequestParam("evidence")String evidence,
+                              @RequestParam("studentId")String studentId){
+        Speciality speciality = new Speciality(studentId,speType,speLevel,content,evidence);
         if (specialityService.addSpeciality(speciality)!=0){
             RespBean.ok("添加特长失败");
         }
+
         return RespBean.ok("添加特长成功！");
     }
 
 
     @RequestMapping(value = "/update/stu",method = RequestMethod.PUT)
-    public RespBean updateStu(Student student){
-        if (studentService.loadStudentById(student.getStudentId())!=null){
-            return RespBean.error("ID 重复");
+    public RespBean updateStu(@RequestParam("oldStudentId")String oldStudentId,
+                              Student student){
+        if (!oldStudentId.equals(student.getStudentId())){
+            if (studentService.loadStudentById(student.getStudentId())!=null){
+                return RespBean.error("ID 重复");
+            }
         }
         if (studentService.updateStudent(student)==0){
             return RespBean.error("更新学生信息失败");
@@ -122,6 +135,7 @@ public class StudentController {
     @RequestMapping(value = "/update/grade",method = RequestMethod.PUT)
     public RespBean updateGrade(@RequestBody GradeUnion gradeUnion){
         //直传，记得加入studentId
+
         for (GeneralGrade generalGrade:gradeUnion.getGeneralGradeList()){
             if (generalGradeService.updateGeneralGrade(generalGrade)==0){
                return RespBean.error("更新学考成绩失败");
@@ -137,9 +151,13 @@ public class StudentController {
     }
     @RequestMapping(value = "/update/spe",method = RequestMethod.PUT)
     public RespBean updateSpe(Speciality speciality){
-        if (specialityService.loadSpeBySpeCode(speciality.getSpeCode())==null){
-            return RespBean.error("特长不存在");
-        }
+//        Speciality oldSpe = specialityService.loadSpeBySpeCode(speciality.getSpeCode());
+//        if (oldSpe == null){
+//            return RespBean.error("特长不存在");
+//        }
+//        if (!oldSpe.getStudentId().equals(speciality.getStudentId())){
+//            return RespBean.error("该学生没有此特长");
+//        }
         if (specialityService.updateSpeciality(speciality)==0){
             return RespBean.error("特长修改失败");
         }
@@ -168,5 +186,5 @@ public class StudentController {
 
         return RespBean.ok("删除成功");
     }
-    
+
 }

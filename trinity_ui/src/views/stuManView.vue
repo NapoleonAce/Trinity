@@ -22,9 +22,7 @@
       <el-dialog
         title="添加学生信息"
         custom-class="demo-drawer"
-        :visible.sync="addDialogVisible"
-        :direction="rtl"
-        :before-close="handleAddClose">
+        :visible.sync="addDialogVisible">
         <el-form
           class="add-student-form"
           :model="addForm">
@@ -32,7 +30,7 @@
             <el-input v-model="addForm.studentId" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="学生姓名" :label-width=120>
-            <el-input v-model="addForm.studentId" auto-complete="off"></el-input>
+            <el-input v-model="addForm.studentName" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="准考证号" :label-width=120>
             <el-input v-model="addForm.examId" auto-complete="off"></el-input>
@@ -49,12 +47,15 @@
           <el-form-item label="高中" :label-width=120>
             <el-input v-model="addForm.school" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="所属省份" :label-width=120>
+            <el-input v-model="addForm.province" auto-complete="off"></el-input>
+          </el-form-item>
         </el-form>
 
-<!--        <div class="demo-drawer__footer">-->
-<!--          <el-button @click="addDialogVisible = false">取 消</el-button>-->
-<!--          <el-button type="primary" @click=" $refs.drawer.closeDrawer()" :loading="addLoading">{{ addLoading ? '提交中 ...' : '确 定' }}</el-button>-->
-<!--        </div>-->
+        <div class="demo-drawer__footer">
+          <el-button @click="addDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleAddClose" >确定</el-button>
+        </div>
       </el-dialog>
 
 <!--      <el-dialog title="添加信息" :visible.sync="addDialogVisible">-->
@@ -125,6 +126,7 @@
                 <el-button @click="scope.row.selectGrade = gradeSelect">
                   选择
                 </el-button>
+                <el-button @click="addNewGrade(scope.row)">添加{{scope.row.selectGrade}}成绩</el-button>
                 <div v-if="scope.row.selectGrade === '学考'" style="margin-top: 30px">
                   <el-form-item
                     v-for="item in scope.row.generalGrade"
@@ -164,7 +166,7 @@
               @click="handleWatchSpe(scope.$index, scope.row)">查看</el-button>
             <el-dialog title="特长" :visible.sync="scope.row.dialogSpeVisible">
               <el-form v-model="specForm">
-                <div v-if="isSelect">
+                <div v-if="scope.row.isSelect">
                   <el-select v-model="scope.row.chosenType"
                              placeholder="选择特长类别">
                     <el-option
@@ -178,10 +180,14 @@
                     选择
                   </el-button>
                   <el-button
-                    @click="clearSpeForm(scope.row)"
-                    icon="el-icon-plus" circle>
+                    @click="clearSpeForm(scope.row)">
+                    添加
+                  </el-button>
+                  <el-button @click="handleSpeDelete(scope.$index, scope.row)" type="danger">
+                    删除此条
                   </el-button>
                 </div>
+
                 <el-form-item label="特长类型" :label-width=120>
                   <el-input v-model="specForm.speType" auto-complete="off" ></el-input>
                 </el-form-item>
@@ -197,7 +203,8 @@
               </el-form>
 
               <div slot="footer" class="dialog-footer">
-                <el-button @click="handleUpdateSpe(scope.row)">确定</el-button>
+                <el-button @click="scope.row.dialogSpeVisible = false">取消</el-button>
+                <el-button @click="handleUpdateSpe(scope.row)">更新</el-button>
               </div>
             </el-dialog>
           </template>
@@ -231,6 +238,9 @@
                 <el-form-item label="高中" :label-width=120>
                   <el-input v-model="form.school" auto-complete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="所属省份" :label-width=120>
+                  <el-input v-model="form.province" auto-complete="off"></el-input>
+                </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="handleUpdateInfo(scope.row)"> 确定</el-button>
@@ -244,7 +254,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="handleStuDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -261,7 +271,6 @@
     components: {LeftNav},
     data(){
       return{
-        isSelect:true,
         addLoading:false,
         gradeSelect:'学考',
         generalGradeLevel:[
@@ -289,7 +298,8 @@
           examId:'',
           gender: '',
           phone:'',
-          school:''
+          school:'',
+          province:''
         },
         specForm:{
           speCode:'',
@@ -304,7 +314,8 @@
           examId:'',
           gender: '',
           phone:'',
-          school:''
+          school:'',
+          province:''
         },
         filterList:[
           { text: '男', value: '男' },
@@ -312,6 +323,7 @@
         ],
         tableData: [
           {
+            isSelect:true,
             selectGrade:'学考',
             chosenType:'',
             dialogGradeVisible:false,
@@ -354,7 +366,6 @@
                 subjectName:'政治',
                 grade:'B'
               },
-
             ],
             majorGrade:[
               {
@@ -408,34 +419,138 @@
     },
     methods:{
       initStuData(){
-
+        this.getRequest('/stuMan/select/stu').then(resp=>{
+          if (resp && resp.status === 200){
+            console.log(resp);
+            var data = resp.data.obj;
+            console.log(data);
+            var _tableData = [];
+            for(var i=0;i<data.length;i++){
+              console.log(data[i].studentName);
+              _tableData[i] = {
+                selectGrade:'学考',
+                chosenType:'',
+                dialogGradeVisible:false,
+                dialogFormVisible:false,
+                dialogInfoVisible:false,
+                dialogSpeVisible:false,
+                studentId: data[i].studentId,
+                studentName: data[i].studentName,
+                examId: data[i].examId,
+                gender: data[i].gender,
+                phone: data[i].phone,
+                school: data[i].school,
+                province: data[i].province,
+                generalGrade: [],
+                majorGrade: [],
+                speciality: []
+              }
+            }
+            this.tableData = _tableData;
+          }
+        })
       },
-      handleAddClose(done){
-        this.$confirm('是否需要保存？')
-          .then(_ => {
-            this.addLoading = true;
-            setTimeout(()=>{
-              this.addLoading = false;
-              done();
-            },2000);
-          })
-          .catch(_ => {});
+      handleAddClose(){
+        //添加学生的时候就添加成绩，选考成绩选定之后就会自动生成所有成绩
+        var reqData = this.addForm;
+        this.postRequest('/stuMan/add/stu',reqData)
+          .then( resp =>{
+            if(resp && resp.status === 200){
+              this.tableData.add(reqData);
+            }
+          });
+        this.addDialogVisible = false;
       },
       handleUpdateInfo(row){
+        var _param = this.form;
+        _param.oldStudentId = row.studentId;
+        this.putRequest("/stuMan/update/stu",_param)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              row.studentId = _param.studentId;
+              row.studentName = _param.studentName;
+              row.examId = _param.examId;
+              row.phone = _param.phone;
+              row.province = _param.province;
+              row.school = _param.school;
+              row.gender = _param.gender;
+            }
+          });
         row.dialogInfoVisible = false;
       },
       handleUpdateGrade(row){
+
+        var _param ={
+          gradeUnion:{
+            generalGradeList:row.generalGrade,
+            majorGradeList:row.majorGrade
+          }
+        };
+        console.log(_param);
+        this.putRequestTest("/stuMan/update/grade",_param)
+          .then(resp =>{
+            if (resp && resp.status===200){
+              console.log(resp);
+            }
+          });
+
         row.dialogGradeVisible = false;
       },
       handleUpdateSpe(row){
-        if(this.isSelect){
+        if(row.isSelect){
           //update
+          var _param = this.specForm;
+          console.log(_param);
+          this.putRequest('/stuMan/update/spe',_param)
+            .then(resp => {
+              if (resp && resp.status === 200){
+                console.log(resp);
+              }
+            })
         }else{
           //insert
+          var _speForm = this.specForm;
+          _speForm.studentId = row.studentId;
+          this.postRequest('/stuMan/add/spe',_speForm)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                var data = resp.data;
+                _speForm.speCode = data.speCode;
+                row.speciality.add(_speForm);
+                row.isSelect = true;
+              }
+            })
+
         }
+
         row.dialogSpeVisible = false;
+
       },
-      handleDelete(index,row){
+      handleStuDelete(index,row){
+        var studentId = row.studentId;
+        this.$confirm('此操作将永久删除['+studentId+'],是否继续?','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          this.deleteRequest('/stuMan/delete/stu',{
+            studentId:studentId
+          }).then(reqs =>{
+            if (reqs && reqs.status === 200){
+              this.tableData.splice(index,1);
+            }
+          })
+        })
+      },
+      handleSpeDelete(index,row){
+        var chosenSpe = this.specForm;
+        this.deleteRequest('stuMan/delete/spe',chosenSpe)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              this.handleWatchSpe(index,row);
+              row.dialogSpeVisible = false;
+            }
+          });
 
       },
       handleWatchInfo(index,row){
@@ -443,15 +558,36 @@
         row.dialogInfoVisible = true;
       },
       handleWatchSpe(index,row){
-        this.specForm = row.speciality[0];
-        row.chosenType = row.speciality[0].speType;
+        this.getRequest('/stuMan/select/spe?studentId='+row.studentId)
+          .then(resp =>{
+             if (resp && resp.status === 200){
+               var data = resp.data.obj;
+               console.log(data);
+               row.speciality = data;
+               this.specForm = row.speciality[0];
+               row.chosenType = row.speciality[0].speType;
+               row.isSelect = true;
+             }else{
+               console.log(1);
+               row.speciality[0] = this.specForm;
+               this.clearSpeForm(row);
+             }
+          })
         row.dialogSpeVisible = true;
       },
       handleWatchGrade(index,row){
+        this.getRequest('/stuMan/select/grade?studentId='+row.studentId)
+          .then(resp=>{
+            if(resp && resp.status === 200){
+              var data = resp.data.obj;
+              row.generalGrade = data.generalGradeList;
+              row.majorGrade = data.majorGradeList;
+            }
+          });
         row.dialogGradeVisible = true;
       },
       filterTag(value, row) {
-        return row.roleName === value;
+        return row.gender === value;
       },
       clearSpeForm(row){
         var _specForm = {
@@ -463,7 +599,7 @@
         };
         row.chosenType = "";
         this.specForm = _specForm;
-        this.isSelect = false;
+        row.isSelect = false;
       },
       chooseType(row){
         //改变specForm

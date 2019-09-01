@@ -33,8 +33,10 @@
 
     <select id="loadAllMajorGradeById"
             resultType="edu.zucc.gats.trinity.bean.MajorGrade">
-        select * from major_grade
+        select student_id,subject_name,major_grade.subject_id,score
+        from major_grade,subject_info
         where student_id = #{studentId}
+          and major_grade.subject_id = subject_info.subject_id
     </select>
 
 </mapper>

@@ -13,6 +13,9 @@ public class GeneralGradeService {
     @Autowired
     GeneralGradeMapper generalGradeMapper;
 
+//    @Autowired
+//    subject
+
     public int addGeneralGrade(GeneralGrade generalGrade){
         return generalGradeMapper.addGeneralGrade(generalGrade);
     }
@@ -34,7 +37,11 @@ public class GeneralGradeService {
 
 
     public List<GeneralGrade> loadAllGeneralGradeById(String studentId){
-        return generalGradeMapper.loadAllGeneralGradeById(studentId);
+        List<GeneralGrade> generalGradeList = generalGradeMapper.loadAllGeneralGradeById(studentId);
+//        for (GeneralGrade generalGrade:generalGradeList){
+//            generalGrade.setSubjectName();
+//        }
+        return generalGradeList;
     }
 
 

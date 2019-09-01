@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.zucc.gats.trinity.mapper.GeneralGradeMapper">
 
+
     <insert id="addGeneralGrade"
             parameterType="edu.zucc.gats.trinity.bean.GeneralGrade">
         insert into general_grade(student_id,subject_id,grade)
@@ -33,8 +34,11 @@
 
     <select id="loadAllGeneralGradeById"
             resultType="edu.zucc.gats.trinity.bean.GeneralGrade">
-        select * from general_grade
+        select student_id,subject_name,general_grade.subject_id,grade
+        from general_grade,subject_info
         where student_id = #{studentId}
+        and general_grade.subject_id = subject_info.subject_id
     </select>
+
 
 </mapper>

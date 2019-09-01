@@ -6,9 +6,6 @@
         <LeftNav></LeftNav>
       </el-aside>
 
-
-
-
       <el-main class="my-main">
       </el-main>
     </el-container>

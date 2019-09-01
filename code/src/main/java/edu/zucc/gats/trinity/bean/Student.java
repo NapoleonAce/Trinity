@@ -10,9 +10,9 @@ public class Student {
     private String phone;
     private String school;
     private String province;
-    private List<GeneralGrade> generalGradeList;
-    private List<MajorGrade> majorGradeList;
-    private List<Speciality> specialityList;
+//    private List<GeneralGrade> generalGradeList;
+//    private List<MajorGrade> majorGradeList;
+//    private List<Speciality> specialityList;
 
     public Student(String studentId, String studentName,
                    String examId, String gender,
@@ -27,26 +27,26 @@ public class Student {
         this.province = province;
 
     }
-
-    public Student(String studentId, String studentName,
-                   String examId, String gender,
-                   String phone, String school,
-                   String province, List<GeneralGrade> generalGradeList,
-                   List<MajorGrade> majorGradeList,
-                   List<Speciality> specialityList) {
-
-        this.studentId = studentId;
-        this.studentName = studentName;
-        this.examId = examId;
-        this.gender = gender;
-        this.phone = phone;
-        this.school = school;
-        this.province = province;
-        this.generalGradeList = generalGradeList;
-        this.majorGradeList = majorGradeList;
-        this.specialityList = specialityList;
-
-    }
+//
+//    public Student(String studentId, String studentName,
+//                   String examId, String gender,
+//                   String phone, String school,
+//                   String province, List<GeneralGrade> generalGradeList,
+//                   List<MajorGrade> majorGradeList,
+//                   List<Speciality> specialityList) {
+//
+//        this.studentId = studentId;
+//        this.studentName = studentName;
+//        this.examId = examId;
+//        this.gender = gender;
+//        this.phone = phone;
+//        this.school = school;
+//        this.province = province;
+//        this.generalGradeList = generalGradeList;
+//        this.majorGradeList = majorGradeList;
+//        this.specialityList = specialityList;
+//
+//    }
 
     @Override
     public String toString() {
@@ -58,9 +58,9 @@ public class Student {
                 ", phone='" + phone + '\'' +
                 ", school='" + school + '\'' +
                 ", province='" + province + '\'' +
-                ", generalGradeList=" + generalGradeList +
-                ", majorGradeList=" + majorGradeList +
-                ", specialityList=" + specialityList +
+//                ", generalGradeList=" + generalGradeList +
+//                ", majorGradeList=" + majorGradeList +
+//                ", specialityList=" + specialityList +
                 '}';
     }
 
