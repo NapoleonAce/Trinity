@@ -23,4 +23,6 @@ public interface EnrollMapper {
 
     List<Enroll> loadAllEnroll(
             @Param("begin")int begin,@Param("offset")int offset);
+
+    List<Enroll> loadAllEnrollByColId(int collegeId);
 }

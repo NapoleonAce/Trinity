@@ -34,44 +34,43 @@
 
       <el-menu
         style = 'width: 100%;font-size: 18px'
-        :default-openeds = "['1']"
         text-color="black"
         active-text-color="#ffd04b">
 
-        <el-menu-item index = "1">
+        <el-submenu index="1">
           <template slot="title">
-              <i class="el-icon-document"></i>
-              <span class="menu-item-text">主页</span>
+            <i class="el-icon-location"></i>
+            <span>管理员</span>
           </template>
-        </el-menu-item>
+          <el-menu-item-group>
+            <el-menu-item index="1-1">用户管理</el-menu-item>
+            <el-menu-item index="1-2">院校管理</el-menu-item>
+            <el-menu-item index="1-3">学生管理</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
 
-        <el-menu-item index = "2">
-            <i class="el-icon-document"></i>
-            <span class="menu-item-text">个人信息</span>
-        </el-menu-item>
-
-        <el-menu-item index = "6">
-          <i class="el-icon-document"></i>
-          <span class="menu-item-text">院校信息</span>
-        </el-menu-item>
-
-        <el-menu-item index = "3">
-          <i class="el-icon-setting"></i>
-          <span class="menu-item-text">院校管理</span>
-        </el-menu-item>
-
-        <el-menu-item index = "4">
+        <el-submenu index="2">
           <template slot="title">
-            <i class="el-icon-setting"></i>
-            <span class="menu-item-text">学生管理</span>
+            <i class="el-icon-location"></i>
+            <span>院校</span>
           </template>
-        </el-menu-item>
-        <el-menu-item index = "5">
+          <el-menu-item-group>
+            <el-menu-item index="2-1">专业管理</el-menu-item>
+            <el-menu-item index="2-2">招生管理</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu index="3">
           <template slot="title">
-            <i class="el-icon-setting"></i>
-            <span class="menu-item-text">用户管理</span>
+            <i class="el-icon-location"></i>
+            <span>学生</span>
           </template>
-        </el-menu-item>
+          <el-menu-item-group>
+            <el-menu-item index="3-1">查询系统</el-menu-item>
+            <el-menu-item index="3-2">个人信息</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
 
       </el-menu>
 

@@ -17,7 +17,7 @@
 
       <el-button
         @click= "addDomainDialogVisible = true"
-      >添加计划</el-button>
+      >添加专业</el-button>
       <el-dialog title="添加专业" :visible.sync="addDomainDialogVisible">
         <el-form :model="addDomainForm">
           <el-form-item label="专业名" :label-width=120>
@@ -72,7 +72,7 @@
             <el-dialog title="编辑信息" :visible.sync="scope.row.dialogInfoVisible">
               <el-form :model="editForm">
                 <el-form-item label="专业 ID" :label-width=120>
-                  <el-input v-model="editForm.domainId" auto-complete="off" :disable="true"></el-input>
+                  <el-input v-model="editForm.domainId" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="专业名" :label-width=120>
                   <el-input v-model="editForm.domainName" auto-complete="off"></el-input>
@@ -169,20 +169,74 @@
     },
     methods:{
       initDomainData(){
-        this.getRequest("/col/dom"+colID,)
+        //暂定为浙江大学城市学院
+        this.getRequest("/col/dom?collegeId="+2)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              var data = resp.data.obj;
+              console.log(data);
+              var _domainData = [];
+              for (var i=0;i<data.length;i++){
+                _domainData[i] = {
+                  dialogInfoVisible:false,
+                  domainId:data[i].domainId,
+                  domainName:data[i].domainName,
+                  domainType:data[i].domainType,
+                  collegeId:data[i].collegeId,
+                  content:data[i].content
+                }
+              }
+              this.domainData = _domainData;
+            }
+          })
       },
       handleAddDomain(){
+        var _param = this.addDomainForm;
+        //暂定为id2
+        _param.collegeId = 2;
+        this.postRequest('/col/dom',_param)
+          .then(resp => {
+            if (resp && resp.status === 200){
+              this.initDomainData();
+            }
+          });
+
         this.addDomainDialogVisible = false;
       },
       handleWatchDomainInfo(index,row){
-        //dialog查看，默认是今年的
         row.dialogInfoVisible = true;
+        this.editForm = row;
       },
       handleUpdateDomain(index,row){
+        var _param = this.editForm;
+        this.putRequest('/col/dom',_param)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              this.initDomainData();
+            }
+          });
         row.dialogInfoVisible = false;
       },
       handleDeleteDomain(index,row){
-
+        this.$confirm('此操作将永久删除['+row.domainName+'],是否继续?','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          var _param = {
+            domainId:row.domainId,
+            domainName:row.domainName,
+            domainType:row.domainType,
+            collegeId:row.collegeId,
+            content:row.content
+          }
+          this.deleteRequest('/col/dom',_param)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                this.initDomainData();
+              }
+            })
+        })
       },
 
     }

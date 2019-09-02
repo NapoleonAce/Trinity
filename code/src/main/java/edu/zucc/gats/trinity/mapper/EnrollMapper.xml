@@ -33,4 +33,20 @@
     <select id="loadAllEnroll" resultType="edu.zucc.gats.trinity.bean.Enroll">
         select * from enroll limit #{begin},#{offset}
     </select>
+
+    <select id="loadAllEnrollByColId"
+            parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.Enroll">
+        select
+            e.year,
+            e.domain_id,
+            e.subject_req,
+            e.price,
+            e.number,
+            d.domain_name,
+            d.domain_type
+        from domain d,enroll e
+        where d.college_id = #{collegeId}
+          and d.domain_id = e.domain_id
+    </select>
 </mapper>

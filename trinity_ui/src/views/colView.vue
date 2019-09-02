@@ -26,7 +26,7 @@
       <el-dialog title="添加计划" :visible.sync="addEnrollDialogVisible">
         <el-form :model="addEnrollForm">
           <el-form-item label="年份" :label-width="120">
-            <el-input v-model="addEnrollForm.year" auto-complete="off" disable="true"></el-input>
+            <el-input v-model="addEnrollForm.year" auto-complete="off" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="专业名" :label-width="120">
             <el-input v-model="addEnrollForm.domainName" auto-complete="off"></el-input>
@@ -50,7 +50,7 @@
       <el-dialog title="报名信息" :visible.sync="applyDialogVisible">
         <el-form :model="applyInfoForm">
           <el-form-item label="报名信息ID" :label-width="120">
-            <el-input v-model="applyInfoForm.applyInfoId" auto-complete="off" disable="true"></el-input>
+            <el-input v-model="applyInfoForm.applyInfoId" auto-complete="off" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="报名方式" :label-width="120">
             <el-input v-model="applyInfoForm.applyWay" auto-complete="off"></el-input>
@@ -140,7 +140,7 @@
             <el-dialog title="编辑信息" :visible.sync="scope.row.dialogFormVisible">
               <el-form :model="form">
                 <el-form-item label="年份" :label-width="120">
-                  <el-input v-model="form.year" auto-complete="off" :disable="true"></el-input>
+                  <el-input v-model="form.year" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="专业名" :label-width="120">
                   <el-input v-model="form.domainName" auto-complete="off"></el-input>

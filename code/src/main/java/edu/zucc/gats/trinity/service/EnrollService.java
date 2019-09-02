@@ -37,4 +37,7 @@ public class EnrollService {
         return enrollMapper.loadAllEnroll(begin, offset);
     }
 
+    public List<Enroll> loadAllEnrollByColId(int collegeId){
+        return enrollMapper.loadAllEnrollByColId(collegeId);
+    }
 }
