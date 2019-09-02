@@ -14,6 +14,6 @@ public interface ApplyInfoMapper {
     
     int updateApplyInfo(ApplyInfo applyInfo);
     
-    List<ApplyInfo> loadApplyByColId(int collegeId);
+    ApplyInfo loadApplyByColId(int collegeId);
     
 }

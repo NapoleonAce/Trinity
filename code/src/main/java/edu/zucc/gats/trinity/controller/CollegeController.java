@@ -1,6 +1,7 @@
 package edu.zucc.gats.trinity.controller;
 
 
+import edu.zucc.gats.trinity.bean.ApplyInfo;
 import edu.zucc.gats.trinity.bean.Domain;
 import edu.zucc.gats.trinity.bean.Enroll;
 import edu.zucc.gats.trinity.bean.RespBean;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static java.lang.System.out;
 
 @RestController
 @RequestMapping(value = "/col")
@@ -118,6 +121,47 @@ public class CollegeController {
     }
 
     //报名信息的增删改查
+    @RequestMapping(value = "/apply",method = RequestMethod.GET)
+    public RespBean getApplyInfo(int collegeId){
+        ApplyInfo applyInfo = applyInfoService.loadApplyByColId(collegeId);
+        if (applyInfo == null){
+            return RespBean.error("不存在报名信息");
+        }
+        return RespBean.ok("加载信息成功",applyInfo);
+    }
+
+    @RequestMapping(value = "/apply",method = RequestMethod.POST)
+    public RespBean addNewApply(ApplyInfo applyInfo){
+        out.println(applyInfo.toString());
+        if (applyInfoService.loadApplyByColId(applyInfo.getCollegeId())!=null){
+            RespBean.error("院校已经拥有报名信息");
+        }
+        if (applyInfoService.addNewApplyInfo(applyInfo) == 0){
+            RespBean.error("添加失败");
+        }
+        return RespBean.ok("添加成功");
+    }
+    @RequestMapping(value = "/apply",method = RequestMethod.PUT)
+    public RespBean updateApply(ApplyInfo applyInfo){
+        if (applyInfoService.loadApplyByColId(applyInfo.getCollegeId())==null){
+            RespBean.error("不存在报名信息");
+        }
+        if (applyInfoService.updateApplyInfo(applyInfo)==0){
+            RespBean.error("更新失败");
+        }
+        return RespBean.ok("更新成功");
+    }
+    @RequestMapping(value = "/apply",method = RequestMethod.DELETE)
+    public RespBean deleteApply(ApplyInfo applyInfo){
+        if (applyInfoService.loadApplyByColId(applyInfo.getCollegeId())==null){
+            RespBean.error("不存在报名信息");
+        }
+        if (applyInfoService.deleteApplyInfo(applyInfo)==0){
+            RespBean.error("删除失败");
+        }
+        return RespBean.ok("删除成功");
+    }
+
 
 
 }

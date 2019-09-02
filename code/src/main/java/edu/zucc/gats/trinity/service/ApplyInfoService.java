@@ -24,7 +24,7 @@ public class ApplyInfoService {
         return applyInfoMapper.updateApplyInfo(applyInfo);
     }
 
-    public List<ApplyInfo> loadApplyByColId(int collegeId){
+    public ApplyInfo loadApplyByColId(int collegeId){
         return applyInfoMapper.loadApplyByColId(collegeId);
     }
 

@@ -1,7 +1,7 @@
 //将学科的id和名字对应起来
 
 var Utils = {
-    subjects: [
+  subjects: [
       '语文',
       '数学',
       '英语',
@@ -13,7 +13,7 @@ var Utils = {
       '历史',
       '地理'
     ],
-    roles:[
+  roles:[
       '管理员',
       '院校',
       '学生'
@@ -37,6 +37,9 @@ var Utils = {
         return i + 1;
       }
     }
+  },
+  formatDate(string){
+    return (new Date(Date.parse(string.replace(/-/g, "/"))));
   }
 }
 export default Utils

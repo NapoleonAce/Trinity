@@ -29,7 +29,14 @@
             <el-input v-model="addEnrollForm.year" auto-complete="off" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="专业名" :label-width="120">
-            <el-input v-model="addEnrollForm.domainName" auto-complete="off"></el-input>
+            <el-select v-model="addEnrollForm.domainId" placeholder="选择专业">
+              <el-option
+                v-for="item in domainData"
+                :key="item.domainId"
+                :label="item.domainName"
+                :value="item.domainId">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="选考科目" :label-width="120">
             <el-input v-model="addEnrollForm.subjectReq" auto-complete="off"></el-input>
@@ -46,12 +53,11 @@
           <el-button type="primary" @click="handleAddEnroll()"  >添 加</el-button>
         </div>
       </el-dialog>
+
       <el-button @click="handleWatchApplyInfo">报名信息</el-button>
       <el-dialog title="报名信息" :visible.sync="applyDialogVisible">
+        <el-button @click="handleWatchApplyInfo" :disabled="true">添加</el-button>
         <el-form :model="applyInfoForm">
-          <el-form-item label="报名信息ID" :label-width="120">
-            <el-input v-model="applyInfoForm.applyInfoId" auto-complete="off" :disabled="true"></el-input>
-          </el-form-item>
           <el-form-item label="报名方式" :label-width="120">
             <el-input v-model="applyInfoForm.applyWay" auto-complete="off"></el-input>
           </el-form-item>
@@ -75,7 +81,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="applyDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleAdd()"  >保存</el-button>
+          <el-button type="primary" @click="handleApply"  >保 存</el-button>
         </div>
       </el-dialog>
 
@@ -143,10 +149,10 @@
                   <el-input v-model="form.year" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="专业名" :label-width="120">
-                  <el-input v-model="form.domainName" auto-complete="off"></el-input>
+                  <el-input v-model="form.domainName" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="专业类别" :label-width="120">
-                  <el-input v-model="form.domainType" auto-complete="off"></el-input>
+                  <el-input v-model="form.domainType" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="计划数" :label-width="120">
                   <el-input v-model="form.number" auto-complete="off"></el-input>
@@ -179,11 +185,13 @@
   import LeftNav from "@/components/leftNav";
   // import baseComponent from "@/components/baseComponent"
   import Utils from "@/utils/Utils"
+  import StuSelect from "@/views/stuSelect";
     export default {
       name: "colView",
-      components:{LeftNav},
+      components:{StuSelect, LeftNav},
       data(){
         return {
+          isAdd:false,
           addEnrollDialogVisible:false,
           applyDialogVisible:false,
           addDomainDialogVisible:false,
@@ -255,30 +263,166 @@
               number:10,
               price:5000.0
             },
-            ]
+            ],
+          domainData:[]
         }
       },
+      mounted(){
+        this.initEnrollData();
+        this.loadDomainInfo();
+      },
       methods:{
+        loadDomainInfo(){
+          this.getRequest("/col/dom?collegeId="+2)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                var data = resp.data.obj;
+                console.log(data);
+                var _domainData = [];
+                for (var i=0;i<data.length;i++){
+                  _domainData[i] = {
+                    domainId:data[i].domainId,
+                    domainName:data[i].domainName,
+                    domainType:data[i].domainType,
+                    collegeId:data[i].collegeId,
+                    content:data[i].content
+                  }
+                }
+                this.domainData = _domainData;
+              }
+            })
+        },
+        initEnrollData(){
+          //暂定为2
+          this.getRequest("/col/enroll?collegeId="+2)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                var data = resp.data.obj;
+                var _enrollData = [];
+                for (var i=0;i<data.length;i++){
+                  _enrollData[i] = {
+                    dialogFormVisible:false,
+                    domainId:data[i].domainId,
+                    domainName:data[i].domainName,
+                    domainType:data[i].domainType,
+                    subjectReq:data[i].subjectReq,
+                    year:data[i].year,
+                    number:data[i].number,
+                    price:data[i].price
+                  }
+                }
+                this.enrollData = _enrollData;
+              }
+            })
+        },
         changeEditPlanYear(row){
           //将计划中的form进行修改
         },
+        handleAddApply(){
+          var _param = this.applyInfoForm;
+          this.postRequest("/col/apply",_param)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                this.isAdd = false;
+                this.applyDialogVisible = false;
+              }
+            });
+
+        },
+        handleUpdateApply(){
+          var _param = this.applyInfoForm;
+          console.log(_param);
+          console.log(typeof (this.applyInfoForm.applyBegin));
+          //时间转换的问题2019-09-23T16:00:00.000+0000
+        //  2019-09-17T16:00:00.000+0000
+          //Wed Sep 18 2019 00:00:00 GMT+0800
+          this.putRequest("/col/apply",_param)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                this.applyDialogVisible = false;
+              }
+            });
+
+        },
+        handleApply(){
+          if (this.isAdd){
+            this.handleAddApply();
+          } else {
+            this.handleUpdateApply();
+          }
+        },
         handleWatchApplyInfo(){
-          //dialog查看，默认是今年的
           this.applyDialogVisible = true;
+          //this.clearApplyForm();
+          this.getRequest("/col/apply?collegeId="+2)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                var data = resp.data.obj;
+                //要将时间进行转换
+                var begin = Utils.formatDate(data.applyBegin);
+                var finish = Utils.formatDate(data.applyFinish);
+                this.applyInfoForm = data;
+                this.applyInfoForm.applyBegin = begin;
+                this.applyInfoForm.applyFinish = finish;
+
+              } else if (resp && resp.status === 500){
+                this.clearApplyForm();
+              }
+            })
+        },
+        clearApplyForm(){
+          var _applyInfoForm ={
+            collegeId:2,
+            applyWay:'',
+            applyCondition:'',
+            applyBegin:'',
+            applyFinish:''
+          };
+          this.applyInfoForm = _applyInfoForm;
+          this.isAdd = true;
         },
         handleWatchAddPlan(){
-          this.addEnrollDialogVisible = true;
+
         },
         handleAddEnroll(){
+          var _param = this.addEnrollForm;
+          this.postRequest("/col/enroll",_param)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                this.initEnrollData();
+              }
+            })
           this.addEnrollDialogVisible = false;
         },
         handleEdit(index,row){
+          this.form = row;
           row.dialogFormVisible = true;
         },
         handleSave(row){
+          var _param = this.form;
+          this.putRequest('/col/enroll',_param)
+            .then(resp =>{
+              if (resp && resp.status === 200){
+                this.initEnrollData();
+              }
+            });
           row.dialogFormVisible = false;
         },
         handleDelete(index,row){
+          var _param = row;
+          this.$confirm('此操作将删除['+row.domainName+']的'+row.year+'招生计划,是否继续?','提示',{
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(()=>{
+            this.deleteRequest('/col/enroll',_param)
+              .then(resp =>{
+                if (resp && resp.status === 200){
+                  this.initEnrollData();
+                }
+              });
+          })
+
         },
 
       }
