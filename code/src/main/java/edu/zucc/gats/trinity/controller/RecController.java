@@ -72,6 +72,9 @@ public class RecController {
         }
         return gson.toJson(recommandList);
     }
+
+
+
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public RespBean loadStuRec(String studentId){
         if (studentService.loadStudentById(studentId)==null){
@@ -83,18 +86,33 @@ public class RecController {
         if (majorGradeList.size() == 0 || generalGradeList.size() == 0){
             return RespBean.error("学生还未添加成绩");
         }
+        recoAlgo(studentId,generalGradeList,majorGradeList,specialityList);
+
+        return RespBean.ok("添加新的推荐内容成功");
+    }
 
 
-        int zuccId = 0;
-        int hduId = 0;
-        int zjutId = 0;
+    private boolean recoAlgo(
+            String studentId,
+            List<GeneralGrade> generalGradeList,
+            List<MajorGrade> majorGradeList,
+            List<Speciality> specialityList){
+        out.println("准备，获得collegeID--------");
 
+        int zuccId = 3;
+        int hduId = 5;
+        int zjutId = 4;
+
+        out.println("计算相关的条件--------");
         boolean hasD = false;
         int zuccScore = 0;
         int hduScore = 0;
         int countGeneralA = 0;
 
         for (GeneralGrade generalGrade:generalGradeList){
+            out.println("zuccScore: "+zuccScore);
+            out.println("hduScore: "+hduScore);
+            out.println("countGeneralA: "+countGeneralA);
             if (generalGrade.getGrade().equals("A")){
                 countGeneralA += 1;
                 if (generalGrade.getSubjectName().equals("语文") ||
@@ -119,20 +137,16 @@ public class RecController {
             //isZjut
             if (countGeneralA == 5){
                 if (specialityList.size()!=0){
-
                     insertDomainIdByColId(zjutId,studentId,"特长加成,", majorGradeList);
                 }
             }else if(countGeneralA > 5) {
-
                 insertDomainIdByColId(zjutId,studentId,"", majorGradeList);
             }
             //hdu
             if (hduScore >= 110){
-
                 insertDomainIdByColId(hduId,studentId,"", majorGradeList);
             }else if(hduScore >= 85){
                 if (specialityList.size()!=0){
-
                     insertDomainIdByColId(hduId,studentId,"特长加成", majorGradeList);
                 }
             }
@@ -147,8 +161,7 @@ public class RecController {
                 insertDomainIdByColId(zuccId,studentId,"特长加成", majorGradeList);
             }
         }
-
-        return RespBean.ok("添加新的推荐内容成功");
+        return true;
     }
 
     private void insertDomainIdByColId(int colId,
@@ -156,25 +169,49 @@ public class RecController {
                                        String addReason,
                                        List<MajorGrade> majorGradeList){
 //        List<Integer> domainIdList = new ArrayList<>();
+        out.println("准备匹配选课  "+colId);
+        out.println(addReason);
         List<EnrollReq> enrollReqList = recommandService.loadSubjectReq(colId);
         for (EnrollReq enrollReq:enrollReqList){
+            String addReasonPr = addReason;
             if (enrollReq.getSubjectReq().equals("不限")){
                 String reason = " 报名条件达标，选考科目不限";
-                addReason += reason;
-                recommandService.addNewReco(new Recommand(studentId,enrollReq.getDomainId(),addReason));
+                addReasonPr += reason;
+                if(this.addNewReco(new Recommand(studentId,enrollReq.getDomainId(),addReasonPr))){
+                    out.println("添加推荐成功");
+                }else {
+                    out.println("添加推荐失败");
+                }
 
             } else {
                 for (MajorGrade majorGrade:majorGradeList){
                     String reason = "学考成绩达标,选考科目";
-                    addReason += reason;
+                    addReasonPr += reason;
                     if (enrollReq.getSubjectReq().indexOf(majorGrade.getSubjectName()) != -1){
-                        addReason = addReason + " " + majorGrade.getSubjectName();
+                        addReasonPr += addReasonPr + " " + majorGrade.getSubjectName();
                     }
                 }
-                addReason += "符合";
+                addReasonPr += "符合";
+                if(this.addNewReco(new Recommand(studentId,enrollReq.getDomainId(),addReasonPr))){
+                    out.println("添加推荐成功");
+                }else {
+                    out.println("添加推荐失败");
+                }
             }
+            out.println(addReasonPr);
         }
     }
 
-  
+    private boolean addNewReco(Recommand recommand){
+        if (recommandService
+                .loadRecByStuIdAndDomainId(recommand.getStudentId(),recommand.getDomainId())!=null){
+            return false;
+        }
+        if (recommandService.addNewReco(recommand)==0){
+            return false;
+        }
+        return true;
+    }
+
+
 }

@@ -36,4 +36,7 @@ public class RecommandService {
     public List<EnrollReq> loadSubjectReq(int collegeId){
         return recommandMapper.loadSubjectReq(collegeId);
     }
+    public Recommand loadRecByStuIdAndDomainId(String studentID,int domainId){
+        return recommandMapper.loadRecByStuIdAndDomainId(studentID,domainId);
+    }
 }

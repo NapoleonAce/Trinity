@@ -99,4 +99,10 @@
           and c.college_id = d.college_id
           and d.domain_id = e.domain_id
     </select>
+
+    <select id="loadRecByStuIdAndDomainId"
+            resultType="edu.zucc.gats.trinity.bean.Recommand">
+        select student_id,domain_id,reason
+        from recommand where student_id = #{studentId} AND domain_id = #{domainId}
+    </select>
 </mapper>

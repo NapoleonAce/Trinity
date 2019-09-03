@@ -20,4 +20,6 @@ public interface RecommandMapper {
     List<Recommand> loadAllMessageFromRec(String studentId);
 
     List<EnrollReq> loadSubjectReq(int collegeId);
+
+    Recommand loadRecByStuIdAndDomainId(String studentId,int domainId);
 }
