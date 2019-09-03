@@ -112,22 +112,14 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="成绩">
+        <el-table-column label="学考成绩">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleWatchGrade(scope.$index, scope.row)">查看</el-button>
-            <el-dialog title="成绩" :visible.sync="scope.row.dialogGradeVisible">
-              <el-form class="my-grade-form">
-                <el-select v-model="gradeSelect">
-                  <el-option label="选考" value="选考"></el-option>
-                  <el-option label="学考" value="学考"></el-option>
-                </el-select>
-                <el-button @click="scope.row.selectGrade = gradeSelect">
-                  选择
-                </el-button>
-                <el-button @click="addNewGrade(scope.row)">添加{{scope.row.selectGrade}}成绩</el-button>
-                <div v-if="scope.row.selectGrade === '学考'" style="margin-top: 30px">
+              @click="watchGeneralGrade(scope.row)">查看</el-button>
+            <el-dialog title="成绩" :visible.sync="scope.row.dialogGeneralGradeVisible">
+              <el-form >
+                <div style="margin-top: 30px">
                   <el-form-item
                     v-for="item in scope.row.generalGrade"
                     :key="item.subjectName"
@@ -143,7 +135,23 @@
                     </el-select>
                   </el-form-item>
                 </div>
-                <div v-else style="margin-top: 30px">
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="scope.row.dialogGeneralGradeVisible = false">取消</el-button>
+                <el-button @click="updateGeneralGrade(scope.row)">确定</el-button>
+              </div>
+            </el-dialog>
+          </template>
+
+        </el-table-column>
+        <el-table-column label="选考成绩">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="watchMajorGrade(scope.row)">查看</el-button>
+            <el-dialog title="成绩" :visible.sync="scope.row.dialogMajorGradeVisible">
+              <el-form class="my-grade-form">
+                <div style="margin-top: 30px">
                   <el-form-item
                     v-for = "item in scope.row.majorGrade"
                     :key="item.subjectName" :label="item.subjectName" :label-width="120">
@@ -151,14 +159,17 @@
                     </el-input>
                   </el-form-item>
                 </div>
-
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="handleUpdateGrade(scope.row)">确定</el-button>
+                <el-button @click="scope.row.dialogMajorGradeVisible = false">取消</el-button>
+                <el-button @click="updateMajorGrade(scope.row)">确定</el-button>
               </div>
             </el-dialog>
           </template>
         </el-table-column>
+
+
+
         <el-table-column label="特长">
           <template slot-scope="scope">
             <el-button
@@ -327,6 +338,8 @@
             selectGrade:'学考',
             chosenType:'',
             dialogGradeVisible:false,
+            dialogGeneralGradeVisible:false,
+            dialogMajorGradeVisible:false,
             dialogFormVisible:false,
             dialogInfoVisible:false,
             dialogSpeVisible:false,
@@ -432,6 +445,8 @@
                 chosenType:'',
                 dialogGradeVisible:false,
                 dialogFormVisible:false,
+                dialogGeneralGradeVisible:false,
+                dialogMajorGradeVisible:false,
                 dialogInfoVisible:false,
                 dialogSpeVisible:false,
                 studentId: data[i].studentId,
@@ -445,6 +460,7 @@
                 majorGrade: [],
                 speciality: []
               }
+              console.log(_tableData[i].dialogGeneralGradeVisible)
             }
             this.tableData = _tableData;
           }
@@ -478,8 +494,60 @@
           });
         row.dialogInfoVisible = false;
       },
-      handleUpdateGrade(row){
+      closeGenGrade(index,row){
+        console.log(row.dialogGeneralGradeVisible);
+        row.dialogGeneralGradeVisible = false;
+        console.log(row.dialogGeneralGradeVisible);
+      },
+      watchGeneralGrade(row){
+        //get
+        this.getRequest('/stuMan/select/gen?studentId='+row.studentId)
+          .then(resp=>{
+            console.log(resp);
+            if (resp){
+              if(resp.data.status === 200){
+                var data = resp.data.obj;
+                console.log(resp.data);
+                console.log(data);
+                row.generalGrade = data;
+                console.log(row.generalGrade);
 
+                row.dialogGeneralGradeVisible = true;
+              }
+            }
+          });
+      },
+      watchMajorGrade(row){
+        this.getRequest('/stuMan/select/major?studentId='+row.studentId)
+          .then(resp=>{
+            if (resp){
+              if(resp.data.status === 200){
+                var data = resp.data.obj;
+                row.majorGrade = data;
+                row.dialogMajorGradeVisible = true;
+              }
+            }
+          });
+      },
+      updateGeneralGrade(row){
+        var _param = {
+            generalListPut:{
+              generalGradeList:row.generalGrade
+            }
+        }
+        console.log(_param)
+        this.postRequestTest("/stuMan/update/gen",_param)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              row.dialogGeneralGradeVisible = false;
+            }
+          })
+      },
+      updateMajorGrade(index,row){
+        var _param = row.majorGrade;
+        row.dialogMajorGradeVisible = false;
+      },
+      handleUpdateGrade(row){
         var _param ={
           gradeUnion:{
             generalGradeList:row.generalGrade,

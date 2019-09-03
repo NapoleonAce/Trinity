@@ -17,6 +17,7 @@ import {deleteRequest} from './utils/api'
 import {putRequest} from "./utils/api"
 import {getRequestBydata} from "./utils/api";
 import {putRequestTest} from "./utils/api";
+import {postRequestTest} from "./utils/api";
 // import Vuex from 'vuex'
 Vue.use(ElementUI)
 Vue.config.productionTip = false
@@ -29,6 +30,7 @@ Vue.prototype.deleteRequest = deleteRequest;
 Vue.prototype.putRequest = putRequest;
 Vue.prototype.getRequestBydata = getRequestBydata;
 Vue.prototype.putRequestTest = putRequestTest;
+Vue.prototype.postRequestTest = postRequestTest;
 
 const store = new Vuex.Store({
   state:{

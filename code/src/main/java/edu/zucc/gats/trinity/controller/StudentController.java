@@ -1,6 +1,7 @@
 package edu.zucc.gats.trinity.controller;
 
 
+import com.google.gson.Gson;
 import edu.zucc.gats.trinity.bean.*;
 import edu.zucc.gats.trinity.mapper.StudentMapper;
 import edu.zucc.gats.trinity.service.GeneralGradeService;
@@ -54,6 +55,24 @@ public class StudentController {
         }
         GradeUnion gradeUnion = new GradeUnion(generalGradeList,majorGradeList);
         return RespBean.ok("加载成绩成功！",gradeUnion);
+    }
+
+    @RequestMapping(value = "/select/gen",method = RequestMethod.GET)
+    public RespBean getStudentGeneralGrade(String studentId){
+        List<GeneralGrade> generalGradeList = generalGradeService.loadAllGeneralGradeById(studentId);
+        if (generalGradeList.size() == 0){
+            return RespBean.error("没有任何学考成绩");
+        }
+        return RespBean.ok("加载学考成绩成功！",generalGradeList);
+    }
+
+    @RequestMapping(value = "/select/major",method = RequestMethod.GET)
+    public RespBean getStudentMajorGrade(String studentId){
+        List<MajorGrade> majorGradeList = majorGradeService.loadAllMajorGradeById(studentId);
+        if (majorGradeList.size() == 0){
+            return RespBean.error("没有任何选考成绩");
+        }
+        return RespBean.ok("加载选考成绩成功！",majorGradeList);
     }
 
     @RequestMapping(value = "/select/spe",method = RequestMethod.GET)
@@ -148,6 +167,27 @@ public class StudentController {
         }
 
         return RespBean.ok("更新成绩成功！");
+    }
+    private static Gson gson = new Gson();
+    @RequestMapping(value = "/update/gen",method = RequestMethod.POST)
+    public RespBean updateGeneralGrade(@RequestBody  GeneralListPut generalListPut){
+        for (GeneralGrade generalGrade:generalListPut.getGeneralGradeList()){
+            if (generalGradeService.updateGeneralGrade(generalGrade)==0){
+                return RespBean.error("更新学考成绩失败");
+            }
+        }
+        return RespBean.ok("更新学考成绩成功！");
+    }
+
+    @RequestMapping(value = "/update/major",method = RequestMethod.PUT)
+    public RespBean updateMajorGrade(List<MajorGrade> majorGradeList){
+
+        for (MajorGrade majorGrade:majorGradeList){
+            if (majorGradeService.updateMajorGrade(majorGrade)==0){
+                return RespBean.error("更新选考成绩失败");
+            }
+        }
+        return RespBean.ok("更新选考成绩成功！");
     }
     @RequestMapping(value = "/update/spe",method = RequestMethod.PUT)
     public RespBean updateSpe(Speciality speciality){

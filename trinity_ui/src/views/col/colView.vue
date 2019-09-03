@@ -208,7 +208,7 @@
           addDomainDialogVisible:false,
           editEnrollDialogVisible:false,
           applyInfoForm:{
-            collegeId:4,
+            collegeId:2,
             applyInfoId:2,
             applyWay:'',
             applyCondition:'',
@@ -264,7 +264,7 @@
       },
       methods:{
         loadDomainInfo(){
-          this.getRequest("/col/dom?collegeId="+4)
+          this.getRequest("/col/dom?collegeId="+2)
             .then(resp =>{
               if (resp && resp.status === 200){
                 var data = resp.data.obj;
@@ -285,7 +285,7 @@
         },
         initEnrollData(){
           //暂定为2
-          this.getRequest("/col/enroll?collegeId="+4)
+          this.getRequest("/col/enroll?collegeId="+2)
             .then(resp =>{
               if (resp && resp.status === 200){
                 var data = resp.data.obj;
@@ -347,13 +347,13 @@
           this.applyDialogVisible = true;
           //this.clearApplyForm();
           console.log("applyinfo begin")
-          this.getRequest("/col/apply?collegeId="+4)
+          this.getRequest("/col/apply?collegeId="+2)
             .then((resp) =>{
               console.log("applyinfo resp")
               console.log(resp)
               if (resp){
                 console.log(resp)
-                if (resp.status === 200) {
+                if (resp.data.status === 200) {
                   var data = resp.data.obj;
                   //要将时间进行转换
                   console.log("i am here 200")
@@ -366,13 +366,16 @@
                   console.log("i am here")
                   this.clearApplyForm();
                 }
+              } else{
+                console.log("i am here")
+                this.clearApplyForm();
               }
             })
           console.log("applyinfo ennd")
         },
         clearApplyForm(){
           var _applyInfoForm ={
-            collegeId:4,
+            collegeId:2,
             applyWay:'',
             applyCondition:'',
             applyBegin:'',

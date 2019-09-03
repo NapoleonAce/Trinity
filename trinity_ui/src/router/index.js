@@ -4,13 +4,13 @@ import Router from 'vue-router'
 import loginView from "../views/loginView";
 import leftNav from '@/components/leftNav'
 import baseComponent from '@/components/baseComponent'
-import homeView from "../views/homeView"
-import managerView from "../views/managerView"
-import stuManView from "../views/stuManView"
-import colView from "../views/colView"
-import colDomView from "@/views/colDomView";
+import homeView from "../views/stu/homeView"
+import managerView from "../views/man/managerView"
+import stuManView from "../views/man/stuManView"
+import colView from "../views/col/colView"
+import colDomView from "@/views/col/colDomView";
 import stuSelect from "@/views/stuSelect";
-import recoView from "@/views/recoView"
+import recoView from "@/views/stu/recoView"
 Vue.use(Router)
 
 export default new Router({

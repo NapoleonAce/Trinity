@@ -4,9 +4,6 @@
     <el-aside>
 
       <div class="left-user-date">
-        <el-dropdown
-          style="color: black"
-          trigger="click">
           <div id = 'user-message'>
             <img
               id = 'user-head-img'
@@ -15,21 +12,8 @@
             <span id='user-name'>
            Ventura
          </span>
-
           </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>同步</el-dropdown-item>
-            <el-dropdown-item>统计</el-dropdown-item>
-            <el-dropdown-item>注销</el-dropdown-item>
-            <router-link to="/aboutView">
-              <el-dropdown-item divided>关于</el-dropdown-item>
-            </router-link>
-            <el-dropdown-item>高级会员</el-dropdown-item>
-            <el-dropdown-item divided>小程序</el-dropdown-item>
-            <el-dropdown-item></el-dropdown-item>
 
-          </el-dropdown-menu>
-        </el-dropdown>
       </div>
 
       <el-menu
@@ -43,9 +27,14 @@
             <span>管理员</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1">用户管理</el-menu-item>
+            <router-link to="/managerView">
+              <el-menu-item index="1-1">用户管理</el-menu-item>
+            </router-link>
             <el-menu-item index="1-2">院校管理</el-menu-item>
-            <el-menu-item index="1-3">学生管理</el-menu-item>
+            <router-link to="/stuManView">
+              <el-menu-item index="1-3">学生管理</el-menu-item>
+            </router-link>
+
           </el-menu-item-group>
         </el-submenu>
 
@@ -55,8 +44,12 @@
             <span>院校</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1">专业管理</el-menu-item>
-            <el-menu-item index="2-2">招生管理</el-menu-item>
+            <router-link to="/colDom">
+              <el-menu-item index="2-1">专业管理</el-menu-item>
+            </router-link>
+            <router-link to="/colView">
+              <el-menu-item index="2-2">招生管理</el-menu-item>
+            </router-link>
           </el-menu-item-group>
         </el-submenu>
 
@@ -66,8 +59,12 @@
             <span>学生</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="3-1">查询系统</el-menu-item>
-            <el-menu-item index="3-2">个人信息</el-menu-item>
+            <router-link to="/homeView">
+              <el-menu-item index="3-1">查询系统</el-menu-item>
+            </router-link>
+            <router-link to="/recoView">
+              <el-menu-item index="3-2">推荐系统</el-menu-item>
+            </router-link>
           </el-menu-item-group>
         </el-submenu>
 

@@ -153,7 +153,6 @@ public class RecController {
         }
         //zucc
         if (zuccScore >= 60){
-
             insertDomainIdByColId(zuccId,studentId,"", majorGradeList);
         }else if (zuccScore >= 40){
             if (specialityList.size()!=0){
