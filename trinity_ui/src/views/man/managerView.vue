@@ -207,6 +207,9 @@
           }
         })
       },
+      filterTag(value, row) {
+        return row.gender === value;
+      },
       handleAdd(){
         //上传数据，并且返回新的
         var newManager = this.addForm;

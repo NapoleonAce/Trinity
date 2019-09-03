@@ -111,14 +111,18 @@
         this.postRequest('/login', {
           manName: this.manager.name,
           password: this.manager.pw,
-          role: this.manager.role
+         // role: this.manager.role
         }).then(resp => {
           _this.loading = false;
           if (resp){
             if (resp.status === 200){
-              var _manager = this.manager
+              var _manager = resp.data.obj;
               _this.$store.commit('login',_manager)
-              _this.$router.push('/homeView')
+              if (_manager.permId === 0){
+                _this.$router.push('/homeView')
+              } else{
+                _this.$router.push('/colView')
+              }
             }else {
               responseMessage = resp.data
             }

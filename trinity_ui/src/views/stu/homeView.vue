@@ -14,12 +14,8 @@
           slot="append"
           icon="el-icon-search"></el-button>
       </el-input>
-
-
     </el-header>
-
     <el-main class="my-main">
-
       <el-Card
         @click=""
         v-for="item in colData"
@@ -27,17 +23,16 @@
         class="col-card">
       <div slot="header" class="clearfix">
         <span>{{item.collegeName}}</span>
-        <el-button
-          style="float: right; padding: 3px 0;"
-          type="text">
-          学校详情
-        </el-button>
+        <span style="float: right; padding: 3px 0;font-size: 12px"> {{item.province}} {{item.city}}</span>
+
+
       </div>
-        <div class="card-search-enroll">
+        <div style="margin-bottom: 20px">
           <el-button
             @click="getEnrollPage(item.collegeId)"
-            size="medium"
-            type="text">招生计划查询</el-button>
+            type="text">
+            招生计划
+          </el-button>
         </div>
         <el-collapse @change="handleChange">
           <el-collapse-item title="报名时间" name="1">
@@ -52,7 +47,9 @@
           <el-collapse-item title="报名方式" name="3">
             <div> {{item.applyInfo.applyWay}}</div>
           </el-collapse-item>
-
+          <el-collapse-item title="学校简介" name="4">
+            <div>{{item.content}} </div>
+          </el-collapse-item>
         </el-collapse>
 
 
@@ -179,17 +176,12 @@
           })
 
       },
-      handleWatchDomainInfo(index,row){
-
-      },
-      handleUpdateDomain(index,row){
-
-      },
       watchEnroll(){
 
       },
       getEnrollPage(colId){
-
+        this.$store.commit('setWatchColId',colId);
+        this.$router.push('/colView');
       },
       searchColByKey(){
         var key = this.searchKey;
@@ -214,8 +206,6 @@
           })
 
       }
-
-
 
     }
   }

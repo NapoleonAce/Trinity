@@ -84,6 +84,7 @@
     components:{LeftNav},
     data(){
       return {
+        grandStudentId:'000',
         searchKey:'',
         recData: [
           {
@@ -127,11 +128,12 @@
       }
     },
     mounted(){
+      this.grandStudentId =this.$store.state.managerInfo.managerCode;
       this.initData();
     },
     methods:{
       initData(){
-        var studentId = '3305';
+        var studentId = this.grandStudentId;
         this.getRequest('/rec/allString?studentId='+studentId)
           .then(resp =>{
             if (resp && resp.status === 200){

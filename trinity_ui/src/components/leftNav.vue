@@ -21,7 +21,7 @@
         text-color="black"
         active-text-color="#ffd04b">
 
-        <el-submenu index="1">
+        <el-submenu v-if="role === 1" index="1">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span>管理员</span>
@@ -38,7 +38,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu index="2">
+        <el-submenu v-if="role === 2 || role ===1" index="2">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span>院校</span>
@@ -53,7 +53,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu index="3">
+        <el-submenu v-if="role===3 || role ===1" index="3">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span>学生</span>
@@ -78,15 +78,33 @@
 
 <script>
     export default {
-        name: "leftNav",
-        methods: {
-          handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-          },
-          handleClose(key, keyPath) {
-            console.log(key, keyPath);
-          }
+      name: "leftNav",
+      data(){
+        return{
+          name:"Ventura",
+          image:"../assets/student.png",
+          role:3,
         }
+      },
+      mounted(){
+        var managerInfo = this.$store.state.managerInfo
+        this.name = managerInfo.managerName;
+        if (managerInfo.permId > 1){
+          this.image = "../assets/teacher2.png";
+          this.role = 2;
+        } else if (managerInfo.permId === 1){
+          this.image = "../assets/bussnes.png";
+          this.role = 1;
+        }
+      },
+      methods: {
+        handleOpen(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleClose(key, keyPath) {
+          console.log(key, keyPath);
+        }
+      }
     }
 </script>
 

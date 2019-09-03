@@ -123,6 +123,8 @@
     components:{LeftNav},
     data(){
       return {
+        isCollege:true,
+        grandCollegeId:0,
         addDomainDialogVisible:false,
         addDomainForm:{
           domainId:1,
@@ -167,12 +169,20 @@
       }
     },
     mounted(){
+      var permId = this.$store.state.managerInfo.permId;
+      if (permId!=0){
+        this.grandCollegeId = permId;
+      } else{
+        this.grandCollegeId = this.$store.state.watchColId;
+        this.isCollege = false;
+      }
+      console.log(this.grandCollegeId);
       this.initDomainData();
     },
     methods:{
       initDomainData(){
         //暂定为浙江大学城市学院
-        this.getRequest("/col/dom?collegeId="+4)
+        this.getRequest("/col/dom?collegeId="+this.grandCollegeId)
           .then(resp =>{
             if (resp && resp.status === 200){
               var data = resp.data.obj;
@@ -195,7 +205,7 @@
       handleAddDomain(){
         var _param = this.addDomainForm;
         //暂定为id2
-        _param.collegeId = 4;
+        _param.collegeId = this.grandCollegeId;
         this.postRequest('/col/dom',_param)
           .then(resp => {
             if (resp && resp.status === 200){

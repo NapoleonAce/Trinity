@@ -22,7 +22,7 @@
 
       <el-button
         @click= "addEnrollDialogVisible = true"
-        >添加计划</el-button>
+        :disabled="!isCollege">添加计划</el-button>
       <el-dialog title="添加计划" :visible.sync="addEnrollDialogVisible">
         <el-form :model="addEnrollForm">
           <el-form-item label="年份" :label-width="120">
@@ -63,6 +63,7 @@
               v-model="applyInfoForm.applyWay"
               type="textarea"
               :autosize="{ minRows: 4, maxRows: 100}"
+              :disabled="!isCollege"
               auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="报名条件" :label-width="120">
@@ -70,10 +71,12 @@
               type="textarea"
               :autosize="{ minRows: 4, maxRows: 100}"
               v-model="applyInfoForm.applyCondition"
+              :disabled="!isCollege"
               auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="报名开始时间" :label-width="120">
             <el-date-picker
+              :disabled="!isCollege"
               v-model="applyInfoForm.applyBegin"
               type="datetime"
               placeholder="选择日期时间">
@@ -81,6 +84,7 @@
           </el-form-item>
           <el-form-item label="报名结束时间" :label-width="120">
             <el-date-picker
+              :disabled="!isCollege"
               v-model="applyInfoForm.applyFinish"
               type="datetime"
               placeholder="选择日期时间">
@@ -89,7 +93,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="applyDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleApply"  >保 存</el-button>
+          <el-button type="primary" @click="handleApply" :disabled="!isCollege" >保 存</el-button>
         </div>
       </el-dialog>
 
@@ -150,6 +154,7 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
+              :disabled="!isCollege"
               @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-dialog title="编辑信息" :visible.sync="scope.row.dialogFormVisible">
               <el-form :model="form">
@@ -180,6 +185,7 @@
             <el-button
               size="mini"
               type="danger"
+              :disabled="!isCollege"
               @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -202,6 +208,8 @@
       components:{StuSelect, LeftNav},
       data(){
         return {
+          isCollege:true,
+          grandCollegeId:0,
           isAdd:false,
           addEnrollDialogVisible:false,
           applyDialogVisible:false,
@@ -259,12 +267,19 @@
         }
       },
       mounted(){
+        var permId = this.$store.state.managerInfo.permId;
+        if (permId !=0 ){
+          this.grandCollegeId = permId;
+        } else{
+          this.grandCollegeId = this.$store.state.watchColId;
+          this.isCollege = false;
+        }
         this.initEnrollData();
         this.loadDomainInfo();
       },
       methods:{
         loadDomainInfo(){
-          this.getRequest("/col/dom?collegeId="+2)
+          this.getRequest("/col/dom?collegeId="+this.grandCollegeId)
             .then(resp =>{
               if (resp && resp.status === 200){
                 var data = resp.data.obj;
@@ -285,7 +300,7 @@
         },
         initEnrollData(){
           //暂定为2
-          this.getRequest("/col/enroll?collegeId="+2)
+          this.getRequest("/col/enroll?collegeId="+this.grandCollegeId)
             .then(resp =>{
               if (resp && resp.status === 200){
                 var data = resp.data.obj;
@@ -347,7 +362,7 @@
           this.applyDialogVisible = true;
           //this.clearApplyForm();
           console.log("applyinfo begin")
-          this.getRequest("/col/apply?collegeId="+2)
+          this.getRequest("/col/apply?collegeId="+this.grandCollegeId)
             .then((resp) =>{
               console.log("applyinfo resp")
               console.log(resp)
@@ -375,7 +390,7 @@
         },
         clearApplyForm(){
           var _applyInfoForm ={
-            collegeId:2,
+            collegeId:this.grandCollegeId,
             applyWay:'',
             applyCondition:'',
             applyBegin:'',

@@ -34,7 +34,8 @@ Vue.prototype.postRequestTest = postRequestTest;
 
 const store = new Vuex.Store({
   state:{
-    managerInfo:{}
+    managerInfo:{},
+    watchColId:0
   },
   getters:{
 
@@ -43,8 +44,12 @@ const store = new Vuex.Store({
 
     //设置用户的信息，用于登录
     login(state,data){
-      state.managerInfo = data
+      state.managerInfo = data;
+      console.log(data);
     },
+    setWatchColId(state,data){
+      state.watchColId = data;
+    }
   },
   actions:{
 
