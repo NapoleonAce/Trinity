@@ -34,14 +34,58 @@
     </select>
 
     <select id="searchCollegeByKey"
-            resultType="edu.zucc.gats.trinity.bean.College">
-        select * from college where college_name 
-        like CONCAT(CONCAT('%', #{key}), '%')
+            resultMap="getColAndApply">
+        select
+            c.college_id,
+            c.college_name,
+            c.city,
+            c.province,
+            c.content,
+            a.apply_info_id,
+            a.apply_condition,
+            a.apply_way,
+            a.apply_begin,
+            a.apply_finish
+        from college c,apply_info a
+        where c.college_id = a.college_id
+          and c.college_name like CONCAT(CONCAT('%', #{key}, '%'))
     </select>
 
     <select id="loadAllCollegeByPage"
             resultType="edu.zucc.gats.trinity.bean.College">
         select * from college limit #{begin},#{offset}
     </select>
+
+    <select id="loadAllCollegeAndApply"
+            resultMap="getColAndApply">
+        select
+            c.college_id,
+            c.college_name,
+            c.city,
+            c.province,
+            c.content,
+            a.apply_info_id,
+            a.apply_condition,
+            a.apply_way,
+            a.apply_begin,
+            a.apply_finish
+        from college c,apply_info a
+        where c.college_id = a.college_id
+    </select>
+    
+    <resultMap id="getColAndApply" type="edu.zucc.gats.trinity.bean.College">
+        <id property="collegeId" column="college_id"/>
+        <result property="collegeName" column="college_name"/>
+        <result property="city" column="city"/>
+        <result property="province" column="province"/>
+        <result property="content" column="content"/>
+        <association property="applyInfo" javaType="edu.zucc.gats.trinity.bean.ApplyInfo">
+            <id property="applyInfoId" column="apply_info_id"/>
+            <result property="applyCondition" column="apply_condition"/>
+            <result property="applyWay" column="apply_way"/>
+            <result property="applyBegin" column="apply_begin"/>
+            <result property="applyFinish" column="apply_finish"/>
+        </association>
+    </resultMap>
 
 </mapper>

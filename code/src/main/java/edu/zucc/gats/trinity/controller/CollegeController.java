@@ -1,10 +1,7 @@
 package edu.zucc.gats.trinity.controller;
 
 
-import edu.zucc.gats.trinity.bean.ApplyInfo;
-import edu.zucc.gats.trinity.bean.Domain;
-import edu.zucc.gats.trinity.bean.Enroll;
-import edu.zucc.gats.trinity.bean.RespBean;
+import edu.zucc.gats.trinity.bean.*;
 import edu.zucc.gats.trinity.service.ApplyInfoService;
 import edu.zucc.gats.trinity.service.CollegeService;
 import edu.zucc.gats.trinity.service.DomainService;
@@ -31,6 +28,25 @@ public class CollegeController {
     EnrollService enrollService;
     @Autowired
     CollegeService collegeService;
+
+    //获取院校+报名信息
+    @RequestMapping(value = "/home",method = RequestMethod.GET)
+    public RespBean getHomeInfo(){
+        List<College> collegeList = collegeService.loadAllCollegeAndApply();
+
+        if (collegeList.size()==0){
+            return RespBean.error("未查询到任何信息");
+        }
+        return RespBean.ok("加载成功",collegeList);
+    }
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    public RespBean searchColByKey(String key){
+        List<College> collegeList = collegeService.searchCollegeByKey(key);
+        if (collegeList.size()==0){
+            return RespBean.error("未查询到任何信息");
+        }
+        return RespBean.ok("搜索成功",collegeList);
+    }
 
     //添加专业
     @RequestMapping(value = "/dom",method = RequestMethod.POST)
@@ -125,7 +141,7 @@ public class CollegeController {
     public RespBean getApplyInfo(int collegeId){
         ApplyInfo applyInfo = applyInfoService.loadApplyByColId(collegeId);
         if (applyInfo == null){
-            return RespBean.error("不存在报名信息");
+            return RespBean.error("不存在报名信息",null);
         }
         return RespBean.ok("加载信息成功",applyInfo);
     }

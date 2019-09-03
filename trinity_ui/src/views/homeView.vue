@@ -5,50 +5,54 @@
     </el-aside>
     <el-header class="my-header" >
       <el-input
+        v-model="searchKey"
         class="my-header-search"
-        placeholder="请输入搜索内容"
+        placeholder="请输入院校关键字"
         prefix-icon="el-icon-search">
-        <el-select v-model="selectType" slot="prepend" placeholder="请选择" style="width: 120px">
-          <el-option label="用户名" value="1"></el-option>
-          <el-option label="用户码" value="2"></el-option>
-        </el-select>
-        <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-button
+          @click="searchColByKey()"
+          slot="append"
+          icon="el-icon-search"></el-button>
       </el-input>
 
-      <el-button
-        @click= "addDomainDialogVisible = true"
-      >添加专业</el-button>
 
     </el-header>
 
     <el-main class="my-main">
+
       <el-Card
         @click=""
-        shadow="hover"
         v-for="item in colData"
         :key="item.collegeId"
         class="col-card">
       <div slot="header" class="clearfix">
         <span>{{item.collegeName}}</span>
-        <el-button style="float: right; padding: 3px 0" type="text">学校详情</el-button>
-<!--        <div style="float: right; padding: 3px 0;font-size: 12px">-->
-<!--          <span>{{item.province}} {{item.city}}</span>-->
-<!--          &lt;!&ndash;          <el-button type="text">学校详情</el-button>&ndash;&gt;-->
-<!--        </div>-->
-
+        <el-button
+          style="float: right; padding: 3px 0;"
+          type="text">
+          学校详情
+        </el-button>
       </div>
-      <div style="margin-bottom: 20px">报名时间
-        <el-tag style="margin: 0px 10px 0px 10px" type="success">{{item.applyInfoForm.applyBegin}}</el-tag>
-        -
-        <el-tag style="margin: 0px 10px 0px 10px" type="danger">{{item.applyInfoForm.applyFinish}}</el-tag>
-      </div>
+        <div class="card-search-enroll">
+          <el-button
+            @click="getEnrollPage(item.collegeId)"
+            size="medium"
+            type="text">招生计划查询</el-button>
+        </div>
         <el-collapse @change="handleChange">
-          <el-collapse-item title="报名条件" name="1">
-            <div> {{item.applyInfoForm.applyCondition}}</div>
+          <el-collapse-item title="报名时间" name="1">
+            <el-tag style="margin: 0px 10px 0px 10px"
+                    type="primary">{{item.applyInfo.applyBegin}}</el-tag>
+            -
+            <el-tag style="margin: 0px 10px 0px 10px" type="danger">{{item.applyInfo.applyFinish}}</el-tag>
           </el-collapse-item>
-          <el-collapse-item title="报名方式" name="2">
-            <div> {{item.applyInfoForm.applyWay}}</div>
+          <el-collapse-item title="报名条件" name="2">
+            <div> {{item.applyInfo.applyCondition}}</div>
           </el-collapse-item>
+          <el-collapse-item title="报名方式" name="3">
+            <div> {{item.applyInfo.applyWay}}</div>
+          </el-collapse-item>
+
         </el-collapse>
 
 
@@ -69,6 +73,7 @@
     components:{LeftNav},
     data(){
       return {
+        searchKey:'',
         colData: [
           {
             dialogInfoVisible: false,
@@ -77,7 +82,7 @@
             content: '浙江大学城市学院具体介绍',
             province: '浙江',
             city: '杭州',
-            applyInfoForm: {
+            applyInfo: {
               collegeId: 1,
               applyInfoId: 2,
               applyWay: '第八条  符合报名条件的学生登录浙江大学城市学院招生信息网，点击“浙江大学城市学院‘三位一体’综合评价招生”进入报名系统，根据网上提示的报考进度依次办理报名相关手续。考生限报1个报考类别。\n' +
@@ -103,7 +108,7 @@
             content: '浙江工业大学介绍',
             province: '浙江',
             city: '杭州',
-            applyInfoForm: {
+            applyInfo: {
               collegeId: 2,
               applyInfoId: 3,
               applyWay: '1.网上报名：符合报名条件的学生请登录浙江工业大学本科招生网（http：//zs.zjut.edu.cn）网上报名专栏，进入“‘三位一体’综合评价招生报名系统”，根据网上提示的报名流程办理报名相关手续。\n' +
@@ -149,11 +154,29 @@
       }
     },
     mounted(){
-      //this.initData();
+      this.initData();
     },
     methods:{
       initData(){
-        //暂定为浙江大学城市学院
+        this.getRequest('/col/home')
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              var data = resp.data.obj;
+              var _colData = [];
+              for (var i=0;i<data.length;i++){
+                _colData[i] = {
+                  dialogInfoVisible: false,
+                  collegeId: data[i].collegeId,
+                  collegeName: data[i].collegeName,
+                  content:data[i].content,
+                  province:data[i].province,
+                  city: data[i].city,
+                  applyInfo:data[i].applyInfo
+                }
+              }
+              this.colData = _colData;
+            }
+          })
 
       },
       handleWatchDomainInfo(index,row){
@@ -162,6 +185,35 @@
       handleUpdateDomain(index,row){
 
       },
+      watchEnroll(){
+
+      },
+      getEnrollPage(colId){
+
+      },
+      searchColByKey(){
+        var key = this.searchKey;
+        this.getRequest('/col/search?key='+key)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              var data = resp.data.obj;
+              var _colData = [];
+              for (var i=0;i<data.length;i++){
+                _colData[i] = {
+                  dialogInfoVisible: false,
+                  collegeId: data[i].collegeId,
+                  collegeName: data[i].collegeName,
+                  content:data[i].content,
+                  province:data[i].province,
+                  city: data[i].city,
+                  applyInfo:data[i].applyInfo
+                }
+              }
+              this.colData = _colData;
+            }
+          })
+
+      }
 
 
 
@@ -178,6 +230,15 @@
     width: 100%;
     background-color: white;
   }
+  .card-search-enroll{
+    display:inline-block;
+    margin-bottom: 20px;
+    font-size: 16px;
+    width: 100%;
+  }
+  /*.card-search-enroll:hover{*/
+  /*  background-color: #AAAAAA;*/
+  /*}*/
   .my-header-search{
     margin-right: 50px;
     width: 500px;
@@ -200,13 +261,16 @@
     padding: 1%;
     z-index: 2;
   }
+  /*.my-button{*/
+  /*  margin-right: 50px;*/
+  /*}*/
   .my-main{
     display: inline-block;
     margin-left: 300px;
     margin-top: 2%;
   }
   .col-card{
-    width:50%;
+    width:60%;
     margin-bottom: 20px;
 
   }

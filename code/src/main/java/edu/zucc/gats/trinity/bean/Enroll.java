@@ -23,6 +23,30 @@ public class Enroll {
         this.price = price;
     }
 
+    public Enroll(int domainId, String domainName, int year, String subjectReq, int number) {
+        this.domainId = domainId;
+        this.domainName = domainName;
+        this.year = year;
+        this.subjectReq = subjectReq;
+        this.number = number;
+    }
+
+    public Enroll(int domainId, int year, String subjectReq, int number) {
+        this.domainId = domainId;
+        this.year = year;
+        this.subjectReq = subjectReq;
+        this.number = number;
+    }
+
+    public Enroll(int domainId, String domainName, String domainType, int year, String subjectReq, int number) {
+        this.domainId = domainId;
+        this.domainName = domainName;
+        this.domainType = domainType;
+        this.year = year;
+        this.subjectReq = subjectReq;
+        this.number = number;
+    }
+
     public Enroll(int domainId, String domainName, String domainType, int year, String subjectReq, int number, float price) {
         this.domainId = domainId;
         this.domainName = domainName;

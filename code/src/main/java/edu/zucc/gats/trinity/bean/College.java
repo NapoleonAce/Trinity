@@ -7,6 +7,8 @@ public class College {
     private String city;
     private String content;
 
+    private ApplyInfo applyInfo;
+
     public College() {
     }
 
@@ -15,6 +17,23 @@ public class College {
         this.province = province;
         this.city = city;
         this.content = content;
+    }
+
+    public College(int collegeId, String collegeName, String province, String city, String content, ApplyInfo applyInfo) {
+        this.collegeId = collegeId;
+        this.collegeName = collegeName;
+        this.province = province;
+        this.city = city;
+        this.content = content;
+        this.applyInfo = applyInfo;
+    }
+
+    public ApplyInfo getApplyInfo() {
+        return applyInfo;
+    }
+
+    public void setApplyInfo(ApplyInfo applyInfo) {
+        this.applyInfo = applyInfo;
     }
 
     @Override

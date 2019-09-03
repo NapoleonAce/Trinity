@@ -10,10 +10,16 @@ import stuManView from "../views/stuManView"
 import colView from "../views/colView"
 import colDomView from "@/views/colDomView";
 import stuSelect from "@/views/stuSelect";
+import recoView from "@/views/recoView"
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path:'/recoView',
+      name:'recoView',
+      component:recoView
+    },
     {
       path:'/stuSelect',
       name:'stuSelect',

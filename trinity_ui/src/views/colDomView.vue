@@ -18,7 +18,9 @@
       <el-button
         @click= "addDomainDialogVisible = true"
       >添加专业</el-button>
-      <el-dialog title="添加专业" :visible.sync="addDomainDialogVisible">
+      <el-dialog
+        title="添加专业"
+        :visible.sync="addDomainDialogVisible">
         <el-form :model="addDomainForm">
           <el-form-item label="专业名" :label-width=120>
             <el-input v-model="addDomainForm.domainName" auto-complete="off" disable="true"></el-input>
@@ -170,7 +172,7 @@
     methods:{
       initDomainData(){
         //暂定为浙江大学城市学院
-        this.getRequest("/col/dom?collegeId="+2)
+        this.getRequest("/col/dom?collegeId="+4)
           .then(resp =>{
             if (resp && resp.status === 200){
               var data = resp.data.obj;
@@ -193,11 +195,18 @@
       handleAddDomain(){
         var _param = this.addDomainForm;
         //暂定为id2
-        _param.collegeId = 2;
+        _param.collegeId = 4;
         this.postRequest('/col/dom',_param)
           .then(resp => {
             if (resp && resp.status === 200){
               this.initDomainData();
+              this.addDomainForm = {
+                domainId:1,
+                domainName:'',
+                domainType:'',
+                collegeId:'',
+                content:''
+              }
             }
           });
 

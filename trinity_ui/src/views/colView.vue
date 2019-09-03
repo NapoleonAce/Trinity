@@ -59,10 +59,18 @@
         <el-button @click="handleWatchApplyInfo" :disabled="true">添加</el-button>
         <el-form :model="applyInfoForm">
           <el-form-item label="报名方式" :label-width="120">
-            <el-input v-model="applyInfoForm.applyWay" auto-complete="off"></el-input>
+            <el-input
+              v-model="applyInfoForm.applyWay"
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 100}"
+              auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="报名条件" :label-width="120">
-            <el-input v-model="applyInfoForm.applyCondition" auto-complete="off"></el-input>
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 100}"
+              v-model="applyInfoForm.applyCondition"
+              auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="报名开始时间" :label-width="120">
             <el-date-picker
@@ -154,6 +162,9 @@
                 <el-form-item label="专业类别" :label-width="120">
                   <el-input v-model="form.domainType" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
+                <el-form-item label="选课要求" :label-width="120">
+                  <el-input v-model="form.subjectReq" auto-complete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="计划数" :label-width="120">
                   <el-input v-model="form.number" auto-complete="off"></el-input>
                 </el-form-item>
@@ -197,7 +208,7 @@
           addDomainDialogVisible:false,
           editEnrollDialogVisible:false,
           applyInfoForm:{
-            collegeId:1,
+            collegeId:4,
             applyInfoId:2,
             applyWay:'',
             applyCondition:'',
@@ -209,7 +220,7 @@
             year:2019,
             subjectReq:"",
             number:0,
-            price:0
+            price:null
           },
           addForm: {
             manCode:'',
@@ -221,8 +232,8 @@
           form:{
             domainId:0,
             domainName:'',
+            subjectReq:'',
             domainType:'',
-            subjectReq:"",
             year:0,
             number:0,
             price:0
@@ -236,32 +247,12 @@
             {
               dialogFormVisible:false,
               domainId:8,
-              domainName:'母猪产后护理',
-              domainType:'农业',
-              subjectReq:"政治历史地理",
+              domainName:'',
+              domainType:'',
+              subjectReq:"",
               year:2019,
-              number:10,
-              price:5000.0
-            },
-            {
-              dialogFormVisible:false,
-              domainId:9,
-              domainName:'母猪产后护理',
-              domainType:'商业',
-              subjectReq:"政治历史地理",
-              year:2019,
-              number:10,
-              price:5000.0
-            },
-            {
-              dialogFormVisible:false,
-              domainId:10,
-              domainName:'母猪产后护理',
-              domainType:'农业',
-              subjectReq:"政治历史地理",
-              year:2019,
-              number:10,
-              price:5000.0
+              number:0,
+              price:0
             },
             ],
           domainData:[]
@@ -273,7 +264,7 @@
       },
       methods:{
         loadDomainInfo(){
-          this.getRequest("/col/dom?collegeId="+2)
+          this.getRequest("/col/dom?collegeId="+4)
             .then(resp =>{
               if (resp && resp.status === 200){
                 var data = resp.data.obj;
@@ -294,7 +285,7 @@
         },
         initEnrollData(){
           //暂定为2
-          this.getRequest("/col/enroll?collegeId="+2)
+          this.getRequest("/col/enroll?collegeId="+4)
             .then(resp =>{
               if (resp && resp.status === 200){
                 var data = resp.data.obj;
@@ -331,8 +322,8 @@
         },
         handleUpdateApply(){
           var _param = this.applyInfoForm;
-          console.log(_param);
-          console.log(typeof (this.applyInfoForm.applyBegin));
+          // console.log(_param);
+          // console.log(typeof (this.applyInfoForm.applyBegin));
           //时间转换的问题2019-09-23T16:00:00.000+0000
         //  2019-09-17T16:00:00.000+0000
           //Wed Sep 18 2019 00:00:00 GMT+0800
@@ -346,6 +337,7 @@
         },
         handleApply(){
           if (this.isAdd){
+            console.log("isAdd: "+this.isAdd);
             this.handleAddApply();
           } else {
             this.handleUpdateApply();
@@ -354,25 +346,33 @@
         handleWatchApplyInfo(){
           this.applyDialogVisible = true;
           //this.clearApplyForm();
-          this.getRequest("/col/apply?collegeId="+2)
-            .then(resp =>{
-              if (resp && resp.status === 200){
-                var data = resp.data.obj;
-                //要将时间进行转换
-                var begin = Utils.formatDate(data.applyBegin);
-                var finish = Utils.formatDate(data.applyFinish);
-                this.applyInfoForm = data;
-                this.applyInfoForm.applyBegin = begin;
-                this.applyInfoForm.applyFinish = finish;
-
-              } else if (resp && resp.status === 500){
-                this.clearApplyForm();
+          console.log("applyinfo begin")
+          this.getRequest("/col/apply?collegeId="+4)
+            .then((resp) =>{
+              console.log("applyinfo resp")
+              console.log(resp)
+              if (resp){
+                console.log(resp)
+                if (resp.status === 200) {
+                  var data = resp.data.obj;
+                  //要将时间进行转换
+                  console.log("i am here 200")
+                  var begin = Utils.formatDate(data.applyBegin);
+                  var finish = Utils.formatDate(data.applyFinish);
+                  this.applyInfoForm = data;
+                  this.applyInfoForm.applyBegin = begin;
+                  this.applyInfoForm.applyFinish = finish;
+                }else {
+                  console.log("i am here")
+                  this.clearApplyForm();
+                }
               }
             })
+          console.log("applyinfo ennd")
         },
         clearApplyForm(){
           var _applyInfoForm ={
-            collegeId:2,
+            collegeId:4,
             applyWay:'',
             applyCondition:'',
             applyBegin:'',
