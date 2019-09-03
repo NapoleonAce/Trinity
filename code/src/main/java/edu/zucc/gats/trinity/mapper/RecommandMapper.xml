@@ -27,4 +27,67 @@
         select * from recommand where student_id = #{studentId}
     </select>
 
+    <select id="loadAllMessageFromRec"
+            resultMap="getAllMsgByRec">
+        SELECT
+            r.student_id,
+            r.domain_id,
+            r.reason,
+            d.domain_name,
+            d.domain_type,
+            d.content,
+            d.college_id,
+            e.number,
+            e.price,
+            e.subject_req,
+
+            c.college_name,
+            c.province,
+            c.city,
+            c.content,
+            a.apply_info_id,
+            a.apply_condition,
+            a.apply_way,
+            a.apply_begin,
+            a.apply_finish
+        from
+            recommand r,
+            college c,
+            domain d,
+            enroll e,
+            apply_info a
+        where r.student_id = #{studentId}
+          and r.domain_id = d.domain_id
+          and d.domain_id = e.domain_id
+          and d.college_id = c.college_id
+          and a.college_id = d.college_id
+    </select>
+
+    <resultMap id="getAllMsgByRec" type="edu.zucc.gats.trinity.bean.Recommand">
+        <id property="studentId" column="student_id"/>
+        <id property="domainId" column="domain_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="reason" column="reason"/>
+        <result property="domainName" column="domain_name"/>
+        <result property="domainType" column="domain_type"/>
+        <result property="domainContent" column="content"/>
+        <result property="number" column="number"/>
+        <result property="price" column="price"/>
+        <result property="subjectReq" column="subject_req"/>
+        <association property="college" javaType="edu.zucc.gats.trinity.bean.College">
+            <id property="collegeId" column="college_id"/>
+            <result property="collegeName" column="college_name"/>
+            <result property="city" column="city"/>
+            <result property="province" column="province"/>
+            <result property="content" column="content1"/>
+            <association property="applyInfo" javaType="edu.zucc.gats.trinity.bean.ApplyInfo">
+                <id property="applyInfoId" column="apply_info_id"/>
+                <result property="applyCondition" column="apply_condition"/>
+                <result property="applyWay" column="apply_way"/>
+                <result property="applyBegin" column="apply_begin"/>
+                <result property="applyFinish" column="apply_finish"/>
+            </association>
+        </association>
+    </resultMap>
+
 </mapper>

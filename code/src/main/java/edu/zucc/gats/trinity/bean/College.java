@@ -12,6 +12,14 @@ public class College {
     public College() {
     }
 
+    public College(String collegeName, String province, String city, String content, ApplyInfo applyInfo) {
+        this.collegeName = collegeName;
+        this.province = province;
+        this.city = city;
+        this.content = content;
+        this.applyInfo = applyInfo;
+    }
+
     public College(String collegeName, String province, String city, String content) {
         this.collegeName = collegeName;
         this.province = province;

@@ -16,6 +16,6 @@ public interface RecommandMapper {
 
     List<Recommand> loadAllRecoByStuId(String studentId);
 
-
+    List<Recommand> loadAllMessageFromRec(String studentId);
 
 }

@@ -28,5 +28,7 @@ public class RecommandService {
         return recommandMapper.loadAllRecoByStuId(studentId);
     }
 
-
+    public List<Recommand> loadAllMessageFromRec(String studentId){
+        return recommandMapper.loadAllMessageFromRec(studentId);
+    }
 }

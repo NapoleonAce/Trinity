@@ -22,10 +22,12 @@
         :key="item.domainId"
         class="col-card">
         <div slot="header" class="clearfix">
-          <span>{{item.domainName}}</span>
-          <span style="float: right; padding: 3px 0;font-size: 15px; ">
-            {{item.domainType}}
-          </span>
+          <span style="font-size: 20px">{{item.domainName}}</span>
+          <el-button
+            type="text"
+            style="float: right; padding: 3px 0;font-size: 15px;">
+            {{item.college.collegeName}}
+          </el-button>
 <!--          <el-button-->
 <!--            style="float: right; padding: 3px 0;"-->
 <!--            type="text">-->
@@ -38,46 +40,31 @@
 <!--            size="medium"-->
 <!--            type="text">招生计划查询</el-button>-->
 <!--        </div>-->
-        <div>推荐理由
-          <span>
-          {{item.reason}}
-          </span>
-        </div>
-        <div>
+        <div >
           <ul>
-            <li>
-              计划数量 {{item.number}}
+            <li>院校地区:&emsp;{{item.college.province}} {{item.college.city}}</li>
+            <li>报名时间:
+<!--              <el-tag style="margin: 0px 10px 0px 10px"-->
+<!--                      type="primary">-->
+                &emsp;{{item.college.applyInfo.applyBegin}}
+<!--              </el-tag>-->
+              -
+<!--              <el-tag style="margin: 0px 10px 0px 10px"-->
+<!--                      type="danger">-->
+                {{item.college.applyInfo.applyFinish}}
+<!--              </el-tag>-->
             </li>
+            <li>所属类别:&emsp;{{item.domainType}}</li>
+            <li>计划数量:&emsp;{{item.number}}</li>
+            <li>选考要求:&emsp;{{item.subjectReq}}</li>
+            <li>推荐理由:</li>
             <li>
-              选考要求 {{item.subjectReq}}
+                &emsp;{{item.reason}}
             </li>
           </ul>
+
         </div>
-        <el-collapse @change="handleChange">
-          <el-collapse-item :title="item.college.collegeName" name="1">
-            <ul>
-              <li>地区  {{item.college.province}} {{item.college.city}}</li>
-              <li>
-                <el-button
-                  style="float: right; padding: 3px 0;"
-                  type="text">
-                更多....
-                </el-button>
-              </li>
-            </ul>
-          </el-collapse-item>
-          <el-collapse-item title="报名时间" name="2">
-            <el-tag style="margin: 0px 10px 0px 10px"
-                    type="primary">
-              {{item.college.applyInfo.applyBegin}}
-            </el-tag>
-            -
-            <el-tag style="margin: 0px 10px 0px 10px"
-                    type="danger">
-              {{item.college.applyInfo.applyFinish}}
-            </el-tag>
-          </el-collapse-item>
-        </el-collapse>
+
 
 
       </el-Card>
@@ -140,30 +127,33 @@
       }
     },
     mounted(){
-      // this.initData();
+      this.initData();
     },
     methods:{
       initData(){
-        // var studentId;
-        // this.getRequest('/stu/rec?studentId='+studentId)
-        //   .then(resp =>{
-        //     if (resp && resp.status === 200){
-        //       var data = resp.data.obj;
-        //       var _colData = [];
-        //       for (var i=0;i<data.length;i++){
-        //         _colData[i] = {
-        //           dialogInfoVisible: false,
-        //           collegeId: data[i].collegeId,
-        //           collegeName: data[i].collegeName,
-        //           content:data[i].content,
-        //           province:data[i].province,
-        //           city: data[i].city,
-        //           applyInfo:data[i].applyInfo
-        //         }
-        //       }
-        //       this.colData = _colData;
-        //     }
-        //   })
+        var studentId = '3305';
+        this.getRequest('/rec/allString?studentId='+studentId)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              console.log(resp);
+              var data = resp.data;
+              this.recData = data;
+              // var data = resp.data.obj;
+              // var _colData = [];
+              // for (var i=0;i<data.length;i++){
+              //   _colData[i] = {
+              //     dialogInfoVisible: false,
+              //     collegeId: data[i].collegeId,
+              //     collegeName: data[i].collegeName,
+              //     content:data[i].content,
+              //     province:data[i].province,
+              //     city: data[i].city,
+              //     applyInfo:data[i].applyInfo
+              //   }
+              // }
+              // this.colData = _colData;
+            }
+          })
 
       },
       handleWatchDomainInfo(index,row){
@@ -222,6 +212,10 @@
     margin-bottom: 20px;
     font-size: 16px;
     width: 100%;
+  }
+  li{
+    list-style: none;
+    padding-bottom: 20px;
   }
   /*.card-search-enroll:hover{*/
   /*  background-color: #AAAAAA;*/
