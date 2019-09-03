@@ -52,6 +52,7 @@ public class College {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", content='" + content + '\'' +
+                ", applyInfo=" + applyInfo +
                 '}';
     }
 

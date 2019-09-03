@@ -1,5 +1,6 @@
 package edu.zucc.gats.trinity.service;
 
+import edu.zucc.gats.trinity.bean.EnrollReq;
 import edu.zucc.gats.trinity.bean.Recommand;
 import edu.zucc.gats.trinity.mapper.RecommandMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,9 @@ public class RecommandService {
 
     public List<Recommand> loadAllMessageFromRec(String studentId){
         return recommandMapper.loadAllMessageFromRec(studentId);
+    }
+
+    public List<EnrollReq> loadSubjectReq(int collegeId){
+        return recommandMapper.loadSubjectReq(collegeId);
     }
 }

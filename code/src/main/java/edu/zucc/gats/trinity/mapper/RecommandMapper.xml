@@ -90,4 +90,13 @@
         </association>
     </resultMap>
 
+    <select id="loadSubjectReq"
+            parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.EnrollReq">
+        SELECT e.domain_id,e.subject_req
+        from college c,domain d,enroll e
+        where c.college_id = #{collegeId}
+          and c.college_id = d.college_id
+          and d.domain_id = e.domain_id
+    </select>
 </mapper>

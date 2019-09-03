@@ -1,6 +1,8 @@
 package edu.zucc.gats.trinity.bean;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /* * @param dateFormat
@@ -14,7 +16,9 @@ public class ApplyInfo {
     private int applyInfoId;
     private String applyWay;
     private String applyCondition;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date applyBegin;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date applyFinish;
 
     public ApplyInfo() {

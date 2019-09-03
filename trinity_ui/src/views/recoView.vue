@@ -138,6 +138,8 @@
               console.log(resp);
               var data = resp.data;
               this.recData = data;
+              // this.recData[0].college.applyInfo.applyBegin = Utils.formatDate(resp.data[0].college.applyInfo.applyBegin);
+              // this.recData[0].college.applyInfo.applyFinish = Utils.formatDate(resp.data[0].college.applyInfo.applyFinish);
               // var data = resp.data.obj;
               // var _colData = [];
               // for (var i=0;i<data.length;i++){

@@ -31,11 +31,11 @@ public class Recommand {
     public Recommand(){
 
     }
-//    public Recommand(String studentId, int domainId, String reason) {
-//        this.studentId = studentId;
-//        this.domainId = domainId;
-//        this.reason = reason;
-//    }
+    public Recommand(String studentId, int domainId, String reason) {
+        this.studentId = studentId;
+        this.domainId = domainId;
+        this.reason = reason;
+    }
 
 
     public Recommand(int domainId, String reason, String domainName, String domainType, String domainContent, int number, float price, String subjectReq, College college) {

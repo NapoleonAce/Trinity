@@ -1,5 +1,6 @@
 package edu.zucc.gats.trinity.mapper;
 
+import edu.zucc.gats.trinity.bean.EnrollReq;
 import edu.zucc.gats.trinity.bean.Recommand;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,4 +19,5 @@ public interface RecommandMapper {
 
     List<Recommand> loadAllMessageFromRec(String studentId);
 
+    List<EnrollReq> loadSubjectReq(int collegeId);
 }
