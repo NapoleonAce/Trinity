@@ -27,6 +27,45 @@
         select * from recommand where student_id = #{studentId}
     </select>
 
+
+    <select id="searchAllMessageFromRecByKey"
+            resultMap="getAllMsgByRec">
+        SELECT
+            r.student_id,
+            r.domain_id,
+            r.reason,
+            d.domain_name,
+            d.domain_type,
+            d.content,
+            d.college_id,
+            e.number,
+            e.price,
+            e.subject_req,
+
+            c.college_name,
+            c.province,
+            c.city,
+            c.content,
+            a.apply_info_id,
+            a.apply_condition,
+            a.apply_way,
+            a.apply_begin,
+            a.apply_finish
+        from
+            recommand r,
+            college c,
+            domain d,
+            enroll e,
+            apply_info a
+        where r.student_id = #{studentId}
+          and r.domain_id = d.domain_id
+          and d.domain_id = e.domain_id
+          and d.college_id = c.college_id
+          and a.college_id = d.college_id
+          and d.domain_name like CONCAT(CONCAT('%', #{key}, '%'))
+    </select>
+
+
     <select id="loadAllMessageFromRec"
             resultMap="getAllMsgByRec">
         SELECT

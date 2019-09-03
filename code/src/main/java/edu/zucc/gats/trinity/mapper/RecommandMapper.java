@@ -22,4 +22,6 @@ public interface RecommandMapper {
     List<EnrollReq> loadSubjectReq(int collegeId);
 
     Recommand loadRecByStuIdAndDomainId(String studentId,int domainId);
+
+    List<Recommand> searchAllMessageFromRecByKey(String key,String studentId);
 }

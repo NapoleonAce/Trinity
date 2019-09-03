@@ -14,6 +14,9 @@
           slot="append"
           icon="el-icon-search"></el-button>
       </el-input>
+      <el-button @click="loadRec">
+        生成推荐
+      </el-button>
     </el-header>
     <el-main class="my-main">
       <el-Card
@@ -128,10 +131,22 @@
       }
     },
     mounted(){
-      this.grandStudentId =this.$store.state.managerInfo.managerCode;
+      this.grandStudentId =this.$store.state.managerInfo.code;
+      console.log(this.$store.state.managerInfo.managerCode)
+      console.log(this.grandStudentId);
       this.initData();
     },
     methods:{
+      loadRec(){
+        var studentId = this.grandStudentId;
+        this.postRequest('/rec/add?studentId='+studentId)
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              console.log(resp);
+              this.initData();
+            }
+          })
+      },
       initData(){
         var studentId = this.grandStudentId;
         this.getRequest('/rec/allString?studentId='+studentId)
@@ -160,6 +175,7 @@
           })
 
       },
+
       handleWatchDomainInfo(index,row){
 
       },
@@ -174,30 +190,15 @@
       },
       searchColByKey(){
         var key = this.searchKey;
-        this.getRequest('/col/search?key='+key)
+        this.getRequest('/rec/search?key='+key+'&studentId='+this.grandStudentId)
           .then(resp =>{
             if (resp && resp.status === 200){
-              var data = resp.data.obj;
-              var _colData = [];
-              for (var i=0;i<data.length;i++){
-                _colData[i] = {
-                  dialogInfoVisible: false,
-                  collegeId: data[i].collegeId,
-                  collegeName: data[i].collegeName,
-                  content:data[i].content,
-                  province:data[i].province,
-                  city: data[i].city,
-                  applyInfo:data[i].applyInfo
-                }
-              }
-              this.colData = _colData;
+              console.log(resp);
+              var data = resp.data;
+              this.recData = data;
             }
           })
-
       }
-
-
-
     }
   }
 </script>

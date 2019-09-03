@@ -39,4 +39,9 @@ public class RecommandService {
     public Recommand loadRecByStuIdAndDomainId(String studentID,int domainId){
         return recommandMapper.loadRecByStuIdAndDomainId(studentID,domainId);
     }
+
+
+    public List<Recommand> searchAllMessageFromRecByKey(String key,String studentId){
+        return recommandMapper.searchAllMessageFromRecByKey(key,studentId);
+    }
 }

@@ -91,6 +91,17 @@ public class RecController {
         return RespBean.ok("添加新的推荐内容成功");
     }
 
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    public Object searchDomainByKey(String key,String studentId){
+        List<Recommand> recommandList = recommandService.searchAllMessageFromRecByKey(key,studentId);
+        for (Recommand recommand :recommandList){
+            out.println(recommand.toString());
+        }
+        if (recommandList.size() == 0){
+            return RespBean.error("未查询到任何信息");
+        }
+        return gson.toJson(recommandList);
+    }
 
     private boolean recoAlgo(
             String studentId,
@@ -183,11 +194,11 @@ public class RecController {
                 }
 
             } else {
+                String reason = "学考成绩达标,选考科目";
+                addReasonPr += reason;
                 for (MajorGrade majorGrade:majorGradeList){
-                    String reason = "学考成绩达标,选考科目";
-                    addReasonPr += reason;
                     if (enrollReq.getSubjectReq().indexOf(majorGrade.getSubjectName()) != -1){
-                        addReasonPr += addReasonPr + " " + majorGrade.getSubjectName();
+                        addReasonPr = addReasonPr + " " + majorGrade.getSubjectName();
                     }
                 }
                 addReasonPr += "符合";

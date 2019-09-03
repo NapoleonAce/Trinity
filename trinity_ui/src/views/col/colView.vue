@@ -298,6 +298,9 @@
               }
             })
         },
+        searchEnroll(){
+
+        },
         initEnrollData(){
           //暂定为2
           this.getRequest("/col/enroll?collegeId="+this.grandCollegeId)
