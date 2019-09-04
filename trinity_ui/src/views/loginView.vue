@@ -120,8 +120,10 @@
               _this.$store.commit('login',_manager)
               if (_manager.permId === 0){
                 _this.$router.push('/homeView')
-              } else{
+              } else if (_manager.permId >=3) {
                 _this.$router.push('/colView')
+              } else {
+                _this.$router.push('/managerView')
               }
             }else {
               responseMessage = resp.data

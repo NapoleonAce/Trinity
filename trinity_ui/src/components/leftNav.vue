@@ -10,7 +10,7 @@
               src="../assets/student.png" alt=""
             >
             <span id='user-name'>
-           Ventura
+           {{name}}
          </span>
           </div>
 
@@ -88,7 +88,7 @@
       },
       mounted(){
         var managerInfo = this.$store.state.managerInfo
-        this.name = managerInfo.managerName;
+        this.name = managerInfo.name;
         if (managerInfo.permId > 1){
           this.image = "../assets/teacher2.png";
           this.role = 2;
