@@ -531,21 +531,30 @@
       },
       updateGeneralGrade(row){
         var _param = {
-            generalListPut:{
               generalGradeList:row.generalGrade
-            }
-        }
-        console.log(_param)
-        this.postRequestTest("/stuMan/update/gen",_param)
+        };
+        console.log(typeof (_param));
+        console.log(JSON.stringify(_param));
+
+        this.postRequestTest("/stuMan/update/gen",JSON.stringify(_param))
           .then(resp =>{
             if (resp && resp.status === 200){
               row.dialogGeneralGradeVisible = false;
             }
           })
       },
-      updateMajorGrade(index,row){
-        var _param = row.majorGrade;
-        row.dialogMajorGradeVisible = false;
+      updateMajorGrade(row){
+
+        var _param = {
+          majorGradeList: row.majorGrade
+        };
+        console.log(JSON.stringify(_param))
+        this.postRequestTest("/stuMan/update/major",JSON.stringify(_param))
+          .then(resp =>{
+            if (resp && resp.status === 200){
+              row.dialogMajorGradeVisible = false;
+            }
+          })
       },
       handleUpdateGrade(row){
         var _param ={

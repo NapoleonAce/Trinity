@@ -170,7 +170,11 @@ public class StudentController {
     }
     private static Gson gson = new Gson();
     @RequestMapping(value = "/update/gen",method = RequestMethod.POST)
-    public RespBean updateGeneralGrade(@RequestBody  GeneralListPut generalListPut){
+    public RespBean updateGeneralGrade(@RequestBody String list){
+
+        out.println(list);
+        GeneralListPut generalListPut = gson.fromJson(list,GeneralListPut.class);
+
         for (GeneralGrade generalGrade:generalListPut.getGeneralGradeList()){
             if (generalGradeService.updateGeneralGrade(generalGrade)==0){
                 return RespBean.error("更新学考成绩失败");
@@ -179,10 +183,14 @@ public class StudentController {
         return RespBean.ok("更新学考成绩成功！");
     }
 
-    @RequestMapping(value = "/update/major",method = RequestMethod.PUT)
-    public RespBean updateMajorGrade(List<MajorGrade> majorGradeList){
+    @RequestMapping(value = "/update/major",method = RequestMethod.POST)
+    public RespBean updateMajorGrade(@RequestBody String list){
 
-        for (MajorGrade majorGrade:majorGradeList){
+        out.println(list);
+
+        MajorListPut majorListPut = gson.fromJson(list,MajorListPut.class);
+
+        for (MajorGrade majorGrade:majorListPut.getMajorGradeList()){
             if (majorGradeService.updateMajorGrade(majorGrade)==0){
                 return RespBean.error("更新选考成绩失败");
             }
