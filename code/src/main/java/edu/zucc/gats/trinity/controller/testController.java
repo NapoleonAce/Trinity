@@ -1,43 +1,57 @@
 package edu.zucc.gats.trinity.controller;
 
-import edu.zucc.gats.trinity.bean.College;
-import edu.zucc.gats.trinity.bean.RespBean;
-import edu.zucc.gats.trinity.service.CollegeService;
+import edu.zucc.gats.trinity.bean.*;
+import edu.zucc.gats.trinity.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import static java.lang.System.in;
 import static java.lang.System.out;
 
 @RestController
 public class testController {
 
+
     @Autowired
-    CollegeService collegeService;
+    DomainService domainService;
 
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public RespBean testModule(){
-        College college = new College("弥斯喀托米尔","密歇根","弥斯喀托米尔","克苏鲁发糖！");
+    @Autowired
+    EnrollService enrollService;
 
-        college.setCollegeId(1);
-        out.print("test loadName ");
-        College college1 = collegeService.loadCollegeByName("克苏鲁");
-        out.println(college1.toString());
+    @Autowired
+    ApplyInfoService applyInfoService;
 
+    @Autowired
+    RecommandService recommandService;
 
-      out.println("test loadPage");
-        List<College> colleges = collegeService.loadAllCollegeByPage(1,2);
-        for (College college2 : colleges){
-            out.println(college2.toString());
+    @Autowired
+    StudentService studentService;
+
+    @Autowired
+    GeneralGradeService generalGradeService;
+
+    @Autowired
+    MajorGradeService majorGradeService;
+
+    @RequestMapping(value = "/test",method = RequestMethod.POST)
+    public RespBean testModule() throws ParseException {
+
+        String stuId = "3306";
+        Student student = studentService.loadStudentById(stuId);
+        out.println(student.toString());
+
+        List<MajorGrade> majorGradeList = majorGradeService.loadAllMajorGradeById(stuId);
+        for (MajorGrade majorGrade:majorGradeList){
+            out.println(majorGrade.toString());
         }
-
-        out.print("test delete ");
-        collegeService.deleteCollege(college1);
-
-
         return RespBean.ok("测试完成！");
     }
 

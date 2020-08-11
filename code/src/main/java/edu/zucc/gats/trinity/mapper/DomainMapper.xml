@@ -42,4 +42,9 @@
         select * from domain limit #{begin},#{offset}
     </select>
 
+    <select id="loadDomainByCol"
+            resultType="edu.zucc.gats.trinity.bean.Domain">
+        select * from domain where college_id = #{collegeId}
+    </select>
+
 </mapper>

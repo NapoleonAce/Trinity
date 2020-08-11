@@ -76,8 +76,6 @@
 </template>
 
 <script>
-  import Util from "@/util/HttpUtil";
-
   export default {
     name: "loginView",
     data() {
@@ -113,14 +111,20 @@
         this.postRequest('/login', {
           manName: this.manager.name,
           password: this.manager.pw,
-          role: this.manager.role
+         // role: this.manager.role
         }).then(resp => {
           _this.loading = false;
           if (resp){
             if (resp.status === 200){
-              var _manager = this.manager
+              var _manager = resp.data.obj;
               _this.$store.commit('login',_manager)
-              _this.$router.push('/homeView')
+              if (_manager.permId === 0){
+                _this.$router.push('/homeView')
+              } else if (_manager.permId >=3) {
+                _this.$router.push('/colView')
+              } else {
+                _this.$router.push('/managerView')
+              }
             }else {
               responseMessage = resp.data
             }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.EnrollMapper">
+    <insert id="addNewEnroll"
+            parameterType="edu.zucc.gats.trinity.bean.Enroll">
+        insert into enroll(year,domain_id,subject_req,number,price)
+        value (#{year},#{domainId},#{subjectReq},#{number},#{price})
+    </insert>
+
+    <update id="updateEnroll"
+            parameterType="edu.zucc.gats.trinity.bean.Enroll">
+        update enroll set subject_req = #{subjectReq},
+                          number = #{number},
+                          price = #{price}
+        where year = #{year} and domain_id = #{domainId}
+    </update>
+
+    <delete id="deleteEnroll"
+            parameterType="edu.zucc.gats.trinity.bean.Enroll">
+        delete from enroll where year = #{year} and domain_id = #{domainId}
+    </delete>
+    <select id="loadEnrollByDomainIdAndYear"
+            parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.Enroll">
+        select * from enroll where domain_id = #{domainId} and year = #{year}
+    </select>
+    <select id="loadEnrollByYear" parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.Enroll">
+        select * from enroll where year = #{year}
+    </select>
+    <select id="loadAllEnroll" resultType="edu.zucc.gats.trinity.bean.Enroll">
+        select * from enroll limit #{begin},#{offset}
+    </select>
+
+    <select id="loadAllEnrollByColId"
+            parameterType="int"
+            resultType="edu.zucc.gats.trinity.bean.Enroll">
+        select
+            e.year,
+            e.domain_id,
+            e.subject_req,
+            e.price,
+            e.number,
+            d.domain_name,
+            d.domain_type
+        from domain d,enroll e
+        where d.college_id = #{collegeId}
+          and d.domain_id = e.domain_id
+    </select>
+</mapper>

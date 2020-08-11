@@ -33,6 +33,10 @@ public class DomainService {
         return domainMapper.loadDomainById(domainId);
     }
 
+    public List<Domain> loadDomainByCol(int collegeId){
+        return domainMapper.loadDomainByCol(collegeId);
+    }
+
     public List<Domain> searchDomainByKey(String key){
         return domainMapper.searchDomainByKey(key);
     }

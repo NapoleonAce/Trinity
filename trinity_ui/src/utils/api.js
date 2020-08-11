@@ -49,6 +49,16 @@ export const postRequest = (url, params) => {
     }
   });
 }
+export const postRequestTest = (url, params) => {
+  return axios({
+    method: 'post',
+    url: `${base}${url}`,
+    data: params,
+    headers: {
+      'Content-Type':'application/json'
+    }
+  });
+}
 export const uploadFileRequest = (url, params) => {
   return axios({
     method: 'post',
@@ -76,15 +86,51 @@ export const putRequest = (url, params) => {
     }
   });
 }
-export const deleteRequest = (url) => {
+export const putRequestTest = (url,params) =>{
+  return axios({
+    method: 'put',
+    url: `${base}${url}`,
+    data: params,
+    headers:{
+      'Content-Type':'application/json; charset=utf-8'
+    }
+  })
+}
+export const deleteRequest = (url,params) => {
   return axios({
     method: 'delete',
-    url: `${base}${url}`
+    url: `${base}${url}`,
+    data: params,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 export const getRequest = (url) => {
   return axios({
     method: 'get',
     url: `${base}${url}`
+  });
+}
+
+export const getRequestBydata = (url,params) => {
+  return axios({
+    method: 'get',
+    url: `${base}${url}`,
+    data: params,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      return ret
+    }],
   });
 }

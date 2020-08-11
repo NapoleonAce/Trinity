@@ -1,5 +1,6 @@
 package edu.zucc.gats.trinity.service;
 
+import com.sun.org.apache.regexp.internal.RE;
 import edu.zucc.gats.trinity.bean.Student;
 import edu.zucc.gats.trinity.mapper.StudentMapper;
 import org.apache.ibatis.annotations.Param;
@@ -29,7 +30,6 @@ public class StudentService {
     public Student loadStudentByName(String studentName){
         return studentMapper.loadStudentByName(studentName);
     }
-
     public Student loadStudentById(String studentId){
         return studentMapper.loadStudentById(studentId);
     }
@@ -42,4 +42,16 @@ public class StudentService {
         return studentMapper.loadAllStudentByPage(begin,offset);
     }
 
+    public String getSubjectName(int subjectId){
+        return studentMapper.getSubjectName(subjectId);
+    }
+
+
+    public int getSubjectId(String subjectName){
+        return studentMapper.getSubjectId(subjectName);
+    }
+
+    public int deleteStuById(String studentId){
+        return studentMapper.deleteStuById(studentId);
+    }
 }

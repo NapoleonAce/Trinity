@@ -22,5 +22,11 @@ public interface StudentMapper {
     List<Student> searchStudentByKey(String key);
     
     List<Student> loadAllStudentByPage(@Param("begin") int begin, @Param("offset") int offset);
-    
+
+    String getSubjectName(int subjectId);
+
+    int getSubjectId(String subjectName);
+
+    int deleteStuById(String studentId);
+
 }

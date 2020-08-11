@@ -6,12 +6,44 @@ public class Manager  {
     private String code;
     private String name;
     private String password;
+    private int roleId;
+    private int permId;
+
+
+    public Manager(String code, String name, String password, int roleId, int permId) {
+        this.code = code;
+        this.name = name;
+        this.password = password;
+        this.roleId = roleId;
+        this.permId = permId;
+    }
+
+    public int getPermId() {
+        return permId;
+    }
+
+    public void setPermId(int permId) {
+        this.permId = permId;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
 
     public Manager(){
 
     }
     public Manager(String code, String name, String password) {
         this.code = code;
+        this.name = name;
+        this.password = password;
+    }
+
+    public Manager(String name, String password) {
         this.name = name;
         this.password = password;
     }
@@ -26,6 +58,8 @@ public class Manager  {
                 "code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
+                ", roleId=" + roleId +
+                ", permId=" + permId +
                 '}';
     }
 

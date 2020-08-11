@@ -43,5 +43,10 @@ public class CollegeService {
         return collegeMapper.loadAllCollegeByPage(begin,offset);
     }
 
+    public List<College> loadAllCollegeAndApply(){
+        return collegeMapper.loadAllCollegeAndApply();
+    }
+
+
 
 }

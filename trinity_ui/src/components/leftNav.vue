@@ -4,69 +4,70 @@
     <el-aside>
 
       <div class="left-user-date">
-        <el-dropdown
-          style="color: black"
-          trigger="click">
           <div id = 'user-message'>
             <img
               id = 'user-head-img'
               src="../assets/student.png" alt=""
             >
             <span id='user-name'>
-           Ventura
+           {{name}}
          </span>
-
           </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>同步</el-dropdown-item>
-            <el-dropdown-item>统计</el-dropdown-item>
-            <el-dropdown-item>注销</el-dropdown-item>
-            <router-link to="/aboutView">
-              <el-dropdown-item divided>关于</el-dropdown-item>
-            </router-link>
-            <el-dropdown-item>高级会员</el-dropdown-item>
-            <el-dropdown-item divided>小程序</el-dropdown-item>
-            <el-dropdown-item></el-dropdown-item>
 
-          </el-dropdown-menu>
-        </el-dropdown>
       </div>
 
       <el-menu
         style = 'width: 100%;font-size: 18px'
-        :default-openeds = "['1']"
         text-color="black"
         active-text-color="#ffd04b">
 
-        <el-menu-item index = "1">
+        <el-submenu v-if="role === 1" index="1">
           <template slot="title">
-              <i class="el-icon-document"></i>
-              <span class="menu-item-text">主页</span>
+            <i class="el-icon-location"></i>
+            <span>管理员</span>
           </template>
-        </el-menu-item>
+          <el-menu-item-group>
+            <router-link to="/managerView">
+              <el-menu-item index="1-1">用户管理</el-menu-item>
+            </router-link>
+            <el-menu-item index="1-2">院校管理</el-menu-item>
+            <router-link to="/stuManView">
+              <el-menu-item index="1-3">学生管理</el-menu-item>
+            </router-link>
 
-        <el-menu-item index = "2">
-            <i class="el-icon-document"></i>
-            <span class="menu-item-text">个人信息</span>
-        </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
 
-        <el-menu-item index = "3">
-          <i class="el-icon-setting"></i>
-          <span class="menu-item-text">院校管理</span>
-        </el-menu-item>
-
-        <el-menu-item index = "4">
+        <el-submenu v-if="role === 2 || role ===1" index="2">
           <template slot="title">
-            <i class="el-icon-setting"></i>
-            <span class="menu-item-text">学生管理</span>
+            <i class="el-icon-location"></i>
+            <span>院校</span>
           </template>
-        </el-menu-item>
-        <el-menu-item index = "5">
+          <el-menu-item-group>
+            <router-link to="/colDom">
+              <el-menu-item index="2-1">专业管理</el-menu-item>
+            </router-link>
+            <router-link to="/colView">
+              <el-menu-item index="2-2">招生管理</el-menu-item>
+            </router-link>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu v-if="role===3 || role ===1" index="3">
           <template slot="title">
-            <i class="el-icon-setting"></i>
-            <span class="menu-item-text">用户信息管理</span>
+            <i class="el-icon-location"></i>
+            <span>学生</span>
           </template>
-        </el-menu-item>
+          <el-menu-item-group>
+            <router-link to="/homeView">
+              <el-menu-item index="3-1">查询系统</el-menu-item>
+            </router-link>
+            <router-link to="/recoView">
+              <el-menu-item index="3-2">推荐系统</el-menu-item>
+            </router-link>
+          </el-menu-item-group>
+        </el-submenu>
+
 
       </el-menu>
 
@@ -77,15 +78,33 @@
 
 <script>
     export default {
-        name: "leftNav",
-        methods: {
-          handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-          },
-          handleClose(key, keyPath) {
-            console.log(key, keyPath);
-          }
+      name: "leftNav",
+      data(){
+        return{
+          name:"Ventura",
+          image:"../assets/student.png",
+          role:3,
         }
+      },
+      mounted(){
+        var managerInfo = this.$store.state.managerInfo
+        this.name = managerInfo.name;
+        if (managerInfo.permId > 1){
+          this.image = "../assets/teacher2.png";
+          this.role = 2;
+        } else if (managerInfo.permId === 1){
+          this.image = "../assets/bussnes.png";
+          this.role = 1;
+        }
+      },
+      methods: {
+        handleOpen(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleClose(key, keyPath) {
+          console.log(key, keyPath);
+        }
+      }
     }
 </script>
 

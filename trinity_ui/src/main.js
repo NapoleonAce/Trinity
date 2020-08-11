@@ -15,7 +15,9 @@ import {getRequest} from './utils/api'
 import {postRequest} from './utils/api'
 import {deleteRequest} from './utils/api'
 import {putRequest} from "./utils/api"
-
+import {getRequestBydata} from "./utils/api";
+import {putRequestTest} from "./utils/api";
+import {postRequestTest} from "./utils/api";
 // import Vuex from 'vuex'
 Vue.use(ElementUI)
 Vue.config.productionTip = false
@@ -26,21 +28,26 @@ Vue.prototype.getRequest = getRequest;
 Vue.prototype.postRequest = postRequest;
 Vue.prototype.deleteRequest = deleteRequest;
 Vue.prototype.putRequest = putRequest;
-
+Vue.prototype.getRequestBydata = getRequestBydata;
+Vue.prototype.putRequestTest = putRequestTest;
+Vue.prototype.postRequestTest = postRequestTest;
 
 const store = new Vuex.Store({
   state:{
-    managerInfo:{}
+    managerInfo:{},
+    watchColId:0
   },
   getters:{
 
   },
   mutations:{
-
-    //设置用户的信息，用于登录
     login(state,data){
-      state.managerInfo = data
+      state.managerInfo = data;
+      console.log(data);
     },
+    setWatchColId(state,data){
+      state.watchColId = data;
+    }
   },
   actions:{
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.MajorGradeMapper">
+
+    <insert id="addMajorGrade"
+            parameterType="edu.zucc.gats.trinity.bean.MajorGrade">
+        insert into major_grade(student_id,subject_id,score)
+            value (#{studentId},#{subjectId},#{score})
+    </insert>
+
+    <update id="updateMajorGrade"
+            parameterType="edu.zucc.gats.trinity.bean.MajorGrade">
+        update major_grade set score = #{score}
+        where student_id = #{studentId}
+          and  subject_id = #{subjectId}
+    </update>
+
+    <delete id="deleteMajorGrade"
+            parameterType="edu.zucc.gats.trinity.bean.MajorGrade">
+        delete from major_grade
+        where student_id = #{studentId}
+          and  subject_id = #{subjectId}
+    </delete>
+
+    <select id="loadMajorGrade"
+            resultType="edu.zucc.gats.trinity.bean.MajorGrade">
+        select * from major_grade
+        where student_id = #{studentId}
+          and  subject_id = #{subjectId}
+    </select>
+
+    <select id="loadAllMajorGradeById"
+            resultType="edu.zucc.gats.trinity.bean.MajorGrade">
+        select student_id,subject_name,major_grade.subject_id,score
+        from major_grade,subject_info
+        where student_id = #{studentId}
+          and major_grade.subject_id = subject_info.subject_id
+    </select>
+
+</mapper>

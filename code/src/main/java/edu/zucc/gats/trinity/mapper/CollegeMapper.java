@@ -24,4 +24,7 @@ public interface CollegeMapper {
 
     //分页查询大学
     List<College> loadAllCollegeByPage(@Param("begin") int begin,@Param("offset") int offset);
+
+    List<College> loadAllCollegeAndApply();
+
 }

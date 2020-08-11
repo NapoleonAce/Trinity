@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zucc.gats.trinity.mapper.ManagerRoleMapper">
+
+    <insert id="addManagerRole">
+        insert into manager_role(manager_code,role_id)
+        value (#{manCode},#{roleId})
+    </insert>
+
+    <delete id="deleteManagerRole">
+        delete from manager_role where manager_code = #{manCode}
+    </delete>
+
+    <update id="updateManagerRole" parameterType="edu.zucc.gats.trinity.bean.ManagerRole">
+        update manager_role set
+        manager_code = #{managerCode},
+        role_id = #{roleId}
+        where id = #{id}
+    </update>
+
+    <select id="loadManagerRoleByManager"
+            parameterType="edu.zucc.gats.trinity.bean.Manager"
+            resultType="edu.zucc.gats.trinity.bean.ManagerRole">
+        select * from manager_role where manager_code = #{code}
+    </select>
+
+</mapper>

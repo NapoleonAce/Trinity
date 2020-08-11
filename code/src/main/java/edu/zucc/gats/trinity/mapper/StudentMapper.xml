@@ -3,24 +3,45 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.zucc.gats.trinity.mapper.StudentMapper">
+    <resultMap id="stuResultMap" type="edu.zucc.gats.trinity.bean.Student">
+        <result property="studentId" column="student_id"/>
+        <result property="studentName" column="student_name"/>
+        <result property="examId" column="exam_id"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="school" column="school"/>
+        <result property="province" column="province"/>
+        <collection property="generalGradeList" ofType="edu.zucc.gats.trinity.bean.GeneralGrade"
+                    autoMapping="true">
+            <id column="subject_id" property="subjectId"/>
+        </collection>
+        <collection property="majorGradeList" ofType="edu.zucc.gats.trinity.bean.MajorGrade"
+                    autoMapping="true">
+            <id column="subject_id" property="subjectId"/>
+        </collection>
+    </resultMap>
 
     <insert id="addStudent" parameterType="edu.zucc.gats.trinity.bean.Student">
         insert into student(student_id,student_name,exam_id,gender,phone,school,province)
-        value (#{studentId},#{studentName},#{examId},#{gender},#{phone},#{school},#{province})
+            value (#{studentId},#{studentName},#{examId},#{gender},#{phone},#{school},#{province})
     </insert>
 
     <delete id="deleteStudent" parameterType="edu.zucc.gats.trinity.bean.Student">
         delete from student where student_id = #{studentId}
     </delete>
 
+    <delete id="deleteStuById" parameterType="String">
+        delete from student where student_id = #{studentId}
+    </delete>
+
     <update id="updateStudent" parameterType="edu.zucc.gats.trinity.bean.Student">
         update student set
-                          student_name = #{studentName},
-                          exam_id = #{examId},
-                          gender = #{gender},
-                          school = #{school},
-                          phone = #{phone},
-                          province = #{province}
+                           student_name = #{studentName},
+                           exam_id = #{examId},
+                           gender = #{gender},
+                           school = #{school},
+                           phone = #{phone},
+                           province = #{province}
         where student_id = #{studentId}
     </update>
 
@@ -31,18 +52,33 @@
 
     <select id="loadStudentById" parameterType="String"
             resultType="edu.zucc.gats.trinity.bean.Student">
-        select * from student where student_id = #{studentId}
+        select *
+        from student
+        where student_id = #{studentId}
+
     </select>
 
     <select id="searchStudentByKey"
             resultType="edu.zucc.gats.trinity.bean.Student">
         select * from student where student_name
-                                       like CONCAT(CONCAT('%', #{key}), '%')
+                                        like CONCAT(CONCAT('%', #{key}), '%')
     </select>
-
     <select id="loadAllStudentByPage"
             resultType="edu.zucc.gats.trinity.bean.Student">
         select * from student limit #{begin},#{offset}
     </select>
+
+    <select id="getSubjectName"
+            parameterType="int"
+            resultType="String">
+        select subject_name from subject_info where subject_id = #{subjectId}
+    </select>
+
+    <select id="getSubjectId"
+            parameterType="String"
+            resultType="int">
+        select subject_id from subject_info where subject_name = #{subjectName}
+    </select>
+
 
 </mapper>
