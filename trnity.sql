@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2019/8/24 9:19:50                            */
+/* Created on:     2019/8/24 9:28:18                            */
 /*==============================================================*/
 
 
@@ -24,7 +24,7 @@ drop table if exists speciality;
 
 drop table if exists student;
 
-drop table if exists subject;
+drop table if exists subject_info;
 
 /*==============================================================*/
 /* Table: apply_info                                            */
@@ -32,12 +32,12 @@ drop table if exists subject;
 create table apply_info
 (
    college_id           smallint not null,
-   "condition"          varchar(1000) not null,
+   apply_condition      varchar(1000) not null,
    apply_begin          timestamp not null,
    apply_finish         timestamp not null,
    apply_way            varchar(1000) not null,
    apply_info_id        mediumint not null auto_increment,
-   primary key (college_id, apply_info_id)
+   primary key (apply_info_id)
 );
 
 /*==============================================================*/
@@ -46,7 +46,7 @@ create table apply_info
 create table college
 (
    college_id           smallint not null auto_increment,
-   name                 varchar(40) not null,
+   college_name         varchar(40) not null,
    province             varchar(20) not null,
    city                 varchar(20) not null,
    content              varchar(400),
@@ -59,7 +59,7 @@ create table college
 create table domain
 (
    domain_id            int not null auto_increment,
-   name                 varchar(40) not null,
+   domain_name          varchar(40) not null,
    domain_type          varchar(20) not null,
    college_id           smallint not null,
    content              varchar(400),
@@ -106,11 +106,11 @@ create table major_grade
 /*==============================================================*/
 create table managers
 (
-   code                 varchar(6) not null,
-   name                 varchar(8) not null,
-   level                varchar(8) not null,
-   password             varchar(6) not null,
-   primary key (code)
+   man_code             varchar(6) not null,
+   man_name             varchar(8) not null,
+   man_level            varchar(8) not null,
+   man_password         vachar(6) not null,
+   primary key (man_code)
 );
 
 /*==============================================================*/
@@ -130,12 +130,12 @@ create table recommand
 create table speciality
 (
    student_id           varchar(18) not null,
-   code                 int not null auto_increment,
-   type                 varchar(10) not null,
-   level                varchar(5) not null,
+   spe_code             int not null auto_increment,
+   spe_type             varchar(10) not null,
+   spe_level            varchar(5) not null,
    content              varchar(400) not null,
    evidence             varchar(400) not null,
-   primary key (student_id, code)
+   primary key (spe_code)
 );
 
 /*==============================================================*/
@@ -144,7 +144,7 @@ create table speciality
 create table student
 (
    student_id           varchar(18) not null,
-   name                 varchar(10),
+   student_name         varchar(10),
    exam_id              varchar(10),
    gender               varchar(2),
    phone                varchar(11),
@@ -154,12 +154,12 @@ create table student
 );
 
 /*==============================================================*/
-/* Table: subject                                               */
+/* Table: subject_info                                          */
 /*==============================================================*/
-create table subject
+create table subject_info
 (
    subject_id           tinyint not null auto_increment,
-   name                 varchar(4) not null,
+   subject_name         varchar(4) not null,
    primary key (subject_id)
 );
 
@@ -176,7 +176,7 @@ alter table general_grade add constraint FK_Reference_6 foreign key (student_id)
       references student (student_id) on delete restrict on update restrict;
 
 alter table general_grade add constraint FK_Reference_7 foreign key (subject_id)
-      references subject (subject_id) on delete restrict on update restrict;
+      references subject_info (subject_id) on delete restrict on update restrict;
 
 alter table major_grade add constraint FK_Reference_5 foreign key (student_id)
       references student (student_id) on delete restrict on update restrict;

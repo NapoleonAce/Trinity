@@ -41,8 +41,6 @@ const store = new Vuex.Store({
 
   },
   mutations:{
-
-    //设置用户的信息，用于登录
     login(state,data){
       state.managerInfo = data;
       console.log(data);
